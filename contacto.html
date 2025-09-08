@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+    <title data-i18n="meta.contact.title">Contacto — Missael Rangel</title>
+    <meta name="description" data-i18n="meta.contact.description" data-i18n-attr="content" />
+    <script>
+        (function () {
+            var k = "site:lang";
+            var saved = null;
+            try { saved = localStorage.getItem(k); } catch (e) { /* ignore */ }
+
+            var nav = (navigator.language || "es").toLowerCase();
+            var lang = (saved === "en" || saved === "es")
+                ? saved
+                : (nav.startsWith("es") ? "es" : "en");
+
+            // Clase en <html> para que el CSS posicione la píldora antes del primer pintado
+            document.documentElement.classList.add("lang-" + lang);
+        })();
+    </script>
+
+
+
+    <!-- Estilos -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png" />
+    <link rel="stylesheet" href="assets/fonts/fontawesome-free-6.1.2-web/css/all.min.css" />
+    <link rel="stylesheet" href="assets/fonts/poppins/poppins.css" />
+    <link rel="stylesheet" href="assets/css/reset.css" />
+    <link rel="stylesheet" href="assets/css/scroll.css" />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <link rel="stylesheet" href="assets/css/loader.css" />
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+
+    <!-- i18n -->
+    <script defer src="assets/js/translations.js"></script>
+    <script defer src="assets/js/i18n.js"></script>
+
+    <!-- Script JS -->
+    <script defer src="assets/js/menu.js"></script>
+    <script defer src="assets/js/map.js"></script>
+</head>
+
+<body>
+    <div class="layout">
+        <aside id="aside-nav" class="layout__aside">
+            <section class="aside__user-info">
+                <div class="user-info__general">
+                    <div class="user-info__container-image">
+                        <img src="assets/img/profile.png" class="user-info__image" data-i18n="common.profileAlt"
+                            data-i18n-attr="alt" alt="Foto de perfil de Missael Rangel" />
+                    </div>
+                    <h2 class="user-info__name">Missael Rangel</h2>
+                    <h4 class="user-info__job" data-i18n="common.userJob">Desarrollador Web Frontend</h4>
+                </div>
+
+                <nav class="layout__menu" data-i18n="common.primaryNav" data-i18n-attr="aria-label"
+                    aria-label="Navegación principal">
+                    <ul class="menu__list">
+                        <li class="menu__option">
+                            <a href="index.html" class="menu__link">
+                                <i class="menu__icon fa-solid fa-house"></i>
+                                <span class="menu__overlay" data-i18n="nav.home">Inicio</span>
+                            </a>
+                        </li>
+
+                        <li class="menu__option">
+                            <a href="sobre-mi.html" class="menu__link">
+                                <i class="menu__icon fa-solid fa-user"></i>
+                                <span class="menu__overlay" data-i18n="nav.about">Sobre mí</span>
+                            </a>
+                        </li>
+
+                        <li class="menu__option">
+                            <a href="portafolio.html" class="menu__link">
+                                <i class="menu__icon fa-solid fa-briefcase"></i>
+                                <span class="menu__overlay" data-i18n="nav.portfolio">Portafolio</span>
+                            </a>
+                        </li>
+
+                        <li class="menu__option">
+                            <a href="contacto.html" class="menu__link menu__link--active" aria-current="page">
+                                <i class="menu__icon fa-solid fa-envelope"></i>
+                                <span class="menu__overlay" data-i18n="nav.contact">Contacto</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="lang-toggle" role="group" data-i18n="common.langToggleLabel" data-i18n-attr="aria-label"
+                    aria-label="Selector de idioma">
+                    <button type="button" class="lang-toggle__btn" data-lang="es" aria-pressed="false">ES</button>
+                    <button type="button" class="lang-toggle__btn" data-lang="en" aria-pressed="false">EN</button>
+                </div>
+
+                <div class="user-info__links">
+                    <ul class="links__social">
+                        <li class="social__option">
+                            <a href="https://www.linkedin.com/in/missaelrangel" class="social__link"
+                                rel="noopener noreferrer" target="_blank">
+                                <i class="social__icon fa-brands fa-linkedin"></i>
+                            </a>
+                        </li>
+                        <li class="social__option">
+                            <a href="https://github.com/zpymis" class="social__link" rel="noopener noreferrer"
+                                target="_blank">
+                                <i class="social__icon fa-brands fa-github"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="user-info__buttons">
+                    <a href="assets/Missael_Rangel_Resume.pdf" class="user-info__btn"
+                        data-i18n="common.downloadCV">Descargar CV</a>
+                </div>
+
+                <footer class="user-info__footer">
+                    &copy; 2025 Missael Rangel
+                </footer>
+            </section>
+        </aside>
+
+        <div class="layout__menu-toggle" role="button" tabindex="0" aria-expanded="false" data-i18n-attr="aria-label"
+            aria-controls="aside-nav" aria-label="Abrir menú">
+            <i class="menu-toggle__icon fa-solid fa-bars"></i>
+            <i class="menu-toggle__icon fa-solid fa-xmark"></i>
+        </div>
+
+        <main class="layout__content">
+            <section class="content__page content__contact">
+                <header class="contact__header">
+                    <h1 class="contact__title" data-i18n="contact.title">Contacto</h1>
+                </header>
+
+                <div class="contact__container">
+                    <section class="contact__info">
+                        <div class="contact__data">
+                            <i class="contact__icon fa-solid fa-location-dot"></i>
+                            <h2 class="contact__subtitle" data-i18n="contact.city">Guadalajara</h2>
+                        </div>
+
+                        <div class="contact__data">
+                            <i class="contact__icon fa-solid fa-phone"></i>
+                            <h2 class="contact__subtitle">
+                                <a href="tel:+523332458102">3332458102</a>
+                            </h2>
+                        </div>
+
+                        <div class="contact__data">
+                            <i class="contact__icon fa-solid fa-envelope"></i>
+                            <h2 class="contact__subtitle">
+                                <a href="mailto:missael.rangeel@gmail.com">missael.rangeel@gmail.com</a>
+                            </h2>
+                        </div>
+
+                        <div class="contact__data">
+                            <i class="contact__icon fa-solid fa-circle-check"></i>
+                            <h2 class="contact__subtitle" data-i18n="common.userJob">Desarrollador Web Frontend</h2>
+                        </div>
+                    </section>
+
+                    <section class="contact__form-box">
+                        <div class="contact__map" id="load-iframe-map">
+                            <span class="loader"></span>
+                        </div>
+
+                        <header class="contact__form-header">
+                            <h3 class="form-header__title" data-i18n="contact.form.header" data-i18n-html>
+                                ¿Cómo puedo <span class="u-accent-strong">ayudarte?</span>
+                            </h3>
+                        </header>
+
+                        <form class="contact__form" method="POST" action="#">
+                            <div class="form__container">
+                                <section class="form__left">
+                                    <div class="form__group">
+                                        <input id="name" type="text" class="form__input" name="name" required
+                                            aria-required="true" data-i18n="contact.form.name"
+                                            data-i18n-attr="placeholder,aria-label" placeholder="Nombre"
+                                            autocomplete="name" />
+                                        <label for="name" class="form__label"
+                                            data-i18n="contact.form.nameLabel">Nombre</label>
+                                    </div>
+
+                                    <div class="form__group">
+                                        <input id="email" type="email" class="form__input" name="email" required
+                                            aria-required="true" data-i18n="contact.form.email"
+                                            data-i18n-attr="placeholder,aria-label" placeholder="Email"
+                                            autocomplete="email" />
+                                        <label for="email" class="form__label"
+                                            data-i18n="contact.form.emailLabel">Email</label>
+                                    </div>
+
+                                    <div class="form__group">
+                                        <input id="subject" type="text" class="form__input" name="subject" required
+                                            aria-required="true" data-i18n="contact.form.subject"
+                                            data-i18n-attr="placeholder,aria-label" placeholder="Asunto" />
+                                        <label for="subject" class="form__label"
+                                            data-i18n="contact.form.subjectLabel">Asunto</label>
+                                    </div>
+                                </section>
+
+                                <section class="form__right">
+                                    <div class="form__group form__group--textarea">
+                                        <textarea id="message" class="form__input form__input--textarea" name="message"
+                                            required aria-required="true" data-i18n="contact.form.message"
+                                            data-i18n-attr="placeholder,aria-label" placeholder="Mensaje"></textarea>
+                                        <label for="message" class="form__label"
+                                            data-i18n="contact.form.messageLabel">Mensaje</label>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <input type="submit" class="form__button" data-i18n="contact.form.submit"
+                                data-i18n-attr="value" value="Enviar mensaje" />
+                        </form>
+                    </section>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

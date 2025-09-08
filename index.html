@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+    <title data-i18n="meta.index.title">Inicio — Missael Rangel</title>
+    <meta name="description" data-i18n="meta.index.description" data-i18n-attr="content" />
+    <script>
+        (function () {
+            var k = "site:lang";
+            var saved = null;
+            try { saved = localStorage.getItem(k); } catch (e) { /* ignore */ }
+
+            var nav = (navigator.language || "es").toLowerCase();
+            var lang = (saved === "en" || saved === "es")
+                ? saved
+                : (nav.startsWith("es") ? "es" : "en");
+
+            // Clase en <html> para que el CSS posicione la píldora antes del primer pintado
+            document.documentElement.classList.add("lang-" + lang);
+        })();
+    </script>
+
+
+    <!-- Estilos -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png" />
+    <link rel="stylesheet" href="assets/fonts/fontawesome-free-6.1.2-web/css/all.min.css" />
+    <link rel="stylesheet" href="assets/fonts/poppins/poppins.css" />
+    <link rel="stylesheet" href="assets/css/reset.css" />
+    <link rel="stylesheet" href="assets/css/scroll.css" />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+
+    <!-- i18n -->
+    <script defer src="assets/js/translations.js"></script>
+    <script defer src="assets/js/i18n.js"></script>
+
+    <!-- Script JS -->
+    <script defer src="assets/js/menu.js"></script>
+</head>
+
+<body>
+    <!-- Layout principal -->
+    <div class="layout">
+        <!-- Barra lateral (info usuario) -->
+        <aside id="aside-nav" class="layout__aside">
+            <section class="aside__user-info">
+                <!-- Informacion general usuario -->
+                <div class="user-info__general">
+                    <div class="user-info__container-image">
+                        <img src="assets/img/profile.png" class="user-info__image" data-i18n="common.profileAlt"
+                            data-i18n-attr="alt" alt="Foto de perfil de Missael Rangel" />
+                    </div>
+                    <h2 class="user-info__name">Missael Rangel</h2>
+                    <h4 class="user-info__job" data-i18n="common.userJob">Desarrollador Web Frontend</h4>
+                </div>
+
+                <!-- Menu de navegación -->
+                <nav class="layout__menu" data-i18n="common.primaryNav" data-i18n-attr="aria-label"
+                    aria-label="Navegación principal">
+                    <ul class="menu__list">
+                        <li class="menu__option">
+                            <a href="index.html" class="menu__link menu__link--active" aria-current="page">
+                                <i class="menu__icon fa-solid fa-house"></i>
+                                <span class="menu__overlay" data-i18n="nav.home">Inicio</span>
+                            </a>
+                        </li>
+
+                        <li class="menu__option">
+                            <a href="sobre-mi.html" class="menu__link">
+                                <i class="menu__icon fa-solid fa-user"></i>
+                                <span class="menu__overlay" data-i18n="nav.about">Sobre mí</span>
+                            </a>
+                        </li>
+
+                        <li class="menu__option">
+                            <a href="portafolio.html" class="menu__link">
+                                <i class="menu__icon fa-solid fa-briefcase"></i>
+                                <span class="menu__overlay" data-i18n="nav.portfolio">Portafolio</span>
+                            </a>
+                        </li>
+
+                        <li class="menu__option">
+                            <a href="contacto.html" class="menu__link">
+                                <i class="menu__icon fa-solid fa-envelope"></i>
+                                <span class="menu__overlay" data-i18n="nav.contact">Contacto</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Toggle de idioma -->
+                <div class="lang-toggle" role="group" data-i18n="common.langToggleLabel" data-i18n-attr="aria-label"
+                    aria-label="Selector de idioma">
+                    <button type="button" class="lang-toggle__btn" data-lang="es" aria-pressed="false">ES</button>
+                    <button type="button" class="lang-toggle__btn" data-lang="en" aria-pressed="false">EN</button>
+                </div>
+
+                <!-- Links a redes sociales -->
+                <div class="user-info__links">
+                    <ul class="links__social">
+                        <li class="social__option">
+                            <a href="https://www.linkedin.com/in/missaelrangel" class="social__link"
+                                rel="noopener noreferrer" target="_blank">
+                                <i class="social__icon fa-brands fa-linkedin"></i>
+                            </a>
+                        </li>
+                        <li class="social__option">
+                            <a href="https://github.com/zpymis" class="social__link" rel="noopener noreferrer"
+                                target="_blank">
+                                <i class="social__icon fa-brands fa-github"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Boton del curriculum -->
+                <div class="user-info__buttons">
+                    <a href="assets/Missael_Rangel_Resume.pdf" class="user-info__btn"
+                        data-i18n="common.downloadCV">Descargar CV</a>
+                </div>
+
+                <!-- Pie de pagina -->
+                <footer class="user-info__footer">
+                    &copy; 2025 Missael Rangel
+                </footer>
+            </section>
+        </aside>
+
+        <!-- MENU RESPONSIVE -->
+        <div class="layout__menu-toggle" role="button" tabindex="0" aria-expanded="false" data-i18n-attr="aria-label"
+            aria-controls="aside-nav" aria-label="Abrir menú">
+            <i class="menu-toggle__icon fa-solid fa-bars"></i>
+            <i class="menu-toggle__icon fa-solid fa-xmark"></i>
+        </div>
+
+        <!-- Contenido principal -->
+        <main class="layout__content">
+            <section class="content__page">
+                <h1 class="page__name">Missael Rangel</h1>
+                <h2 class="page__job" data-i18n="home.hero.job">Desarrollador Web Frontend</h2>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>
