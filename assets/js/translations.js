@@ -84,30 +84,38 @@ window.TRANSLATIONS = {
       mapTitle: "Mapa: Guadalajara",
       form: {
         header: '¿Cómo puedo <span class="u-accent-strong">ayudarte</span>?',
-        // Placeholders y tooltips (title) por campo
+
+        // Placeholders y tooltips (title)
         name: {
           placeholder: "Nombre",
           title: "Escribe tu nombre (solo letras y espacios).",
         },
         nameLabel: "Nombre",
-        email: { placeholder: "Email", title: "Ingresa un correo válido." },
+
+        email: {
+          placeholder: "Email",
+          title: "Ingresa un correo válido (ej. nombre@dominio.com).",
+        },
         emailLabel: "Email",
+
         subject: {
           placeholder: "Asunto",
           title: "Escribe un asunto (mínimo 4 caracteres).",
         },
         subjectLabel: "Asunto",
+
         message: {
           placeholder: "Mensaje",
           title: "Cuéntame sobre tu proyecto.",
         },
         messageLabel: "Mensaje",
+
         submit: "Enviar mensaje",
 
-        // Mensajes de error para validación
+        // Errores i18n
         errors: {
           name: "Escribe tu nombre (solo letras y espacios, mínimo 2).",
-          email: "Ingresa un email válido.",
+          email: "Ingresa un email válido (ej. nombre@dominio.com).",
           subject: "Escribe un asunto (mínimo 4 caracteres).",
           message: "Escribe un mensaje (mínimo 10 caracteres).",
           recaptcha: "Marca “No soy un robot” antes de enviar.",
@@ -193,28 +201,36 @@ window.TRANSLATIONS = {
       mapTitle: "Map: Guadalajara",
       form: {
         header: 'How can <span class="u-accent-strong">I help you?</span>',
+
         name: {
           placeholder: "Name",
           title: "Write your name (letters and spaces only).",
         },
         nameLabel: "Name",
-        email: { placeholder: "Email", title: "Enter a valid email address." },
+
+        email: {
+          placeholder: "Email",
+          title: "Enter a valid email (e.g. name@domain.com).",
+        },
         emailLabel: "Email",
+
         subject: {
           placeholder: "Subject",
           title: "Write a subject (minimum 4 characters).",
         },
         subjectLabel: "Subject",
+
         message: {
           placeholder: "Message",
           title: "Tell me about your project.",
         },
         messageLabel: "Message",
+
         submit: "Send message",
 
         errors: {
           name: "Please enter your name (letters and spaces, at least 2).",
-          email: "Enter a valid email address.",
+          email: "Enter a valid email (e.g. name@domain.com).",
           subject: "Please enter a subject (minimum 4 characters).",
           message: "Please enter a message (minimum 10 characters).",
           recaptcha: "Please check “I'm not a robot”.",

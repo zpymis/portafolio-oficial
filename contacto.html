@@ -19,6 +19,13 @@
         })();
     </script>
 
+    <!-- FIX: oculta cualquier elemento con [hidden] aunque el reset lo rompa -->
+    <style>
+        [hidden] {
+            display: none !important;
+        }
+    </style>
+
     <!-- Estilos -->
     <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png" />
     <link rel="stylesheet" href="assets/fonts/fontawesome-free-6.1.2-web/css/all.min.css" />
@@ -192,7 +199,9 @@
                                     <div class="form__group">
                                         <!-- EMAIL -->
                                         <input id="email" type="email" class="form__input" name="email" required
-                                            inputmode="email" autocomplete="email" title="Ingresa un correo válido."
+                                            inputmode="email" autocomplete="email"
+                                            pattern="^[^@\s]+@[^@\s]+\.[^@\s]{2,}$"
+                                            title="Ingresa un correo válido (ej. nombre@dominio.com)."
                                             aria-required="true" data-i18n="contact.form.email"
                                             data-i18n-attr="placeholder,aria-label,title" placeholder="Email" />
                                         <label for="email" class="form__label"
@@ -244,13 +253,13 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.querySelector('.contact__form');
-            const submitBtn = form?.querySelector('.form__button');
+            if (!form) return;
+
+            const submitBtn = form.querySelector('.form__button');
             const captchaGroup = document.querySelector('.form__group--captcha');
 
-            // Helpers i18n
-            const T = (key, fb) =>
-                (window.i18n && typeof i18n.t === 'function' && i18n.t(key)) || fb;
-
+            // i18n helpers
+            const T = (k, fb) => (window.i18n && typeof i18n.t === 'function' && i18n.t(k)) || fb;
             const currentLang = () =>
                 (window.i18n && typeof i18n.current === 'function' && i18n.current()) ||
                 document.documentElement.getAttribute('lang') || 'es';
@@ -258,7 +267,7 @@
             function buildMsgs() {
                 return {
                     name: T('contact.form.errors.name', 'Escribe tu nombre (solo letras y espacios, mínimo 2).'),
-                    email: T('contact.form.errors.email', 'Ingresa un email válido.'),
+                    email: T('contact.form.errors.email', 'Ingresa un email válido (ej. nombre@dominio.com).'),
                     subject: T('contact.form.errors.subject', 'Escribe un asunto (mínimo 4 caracteres).'),
                     message: T('contact.form.errors.message', 'Escribe un mensaje (mínimo 10 caracteres).'),
                     default: T('contact.form.errors.default', 'Completa este campo.'),
@@ -267,12 +276,18 @@
             }
             let MSG = buildMsgs();
 
-            // Mensajes personalizados por campo
+            // Muestra SIEMPRE nuestros mensajes (no los del navegador)
             form.querySelectorAll('input[required], textarea[required]').forEach(el => {
+                // limpia espacios al salir
+                el.addEventListener('blur', () => { el.value = el.value.trim(); });
+
                 el.addEventListener('input', () => el.setCustomValidity(''));
-                el.addEventListener('invalid', () => {
+                el.addEventListener('invalid', (e) => {
+                    e.preventDefault(); // no uses el mensaje del navegador
                     const id = el.id;
                     el.setCustomValidity(MSG[id] || MSG.default);
+                    // muestra nuestro mensaje ahora
+                    el.reportValidity();
                 });
             });
 
@@ -302,49 +317,46 @@
                 if (captchaErrorEl) captchaErrorEl.textContent = '';
             }
 
-            // Evita limpiar el formulario si falta el captcha
+            // Evita que se limpien campos si falta el captcha
             form.addEventListener('submit', (e) => {
                 clearCaptchaError();
                 const solved = !!getCaptchaResponse();
                 if (!solved) {
                     e.preventDefault();
                     showCaptchaError();
-                    submitBtn?.removeAttribute('disabled'); // no bloquear si no se envió
+                    submitBtn?.removeAttribute('disabled');
                     captchaGroup?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 } else {
-                    // Envío real: evita doble submit
-                    submitBtn?.setAttribute('disabled', 'true');
+                    submitBtn?.setAttribute('disabled', 'true'); // evita doble submit
                 }
             });
 
-            // Si cambias de idioma, actualiza mensajes y recarga para que reCAPTCHA cambie de idioma
+            // Cambiar idioma: refresca mensajes y recarga para que reCAPTCHA cambie de idioma
             document.querySelectorAll('[data-lang]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     setTimeout(() => {
                         MSG = buildMsgs();
                         clearCaptchaError();
-                        location.reload(); // fuerza que el widget reCAPTCHA se renderice en el nuevo idioma
+                        location.reload(); // el widget reCAPTCHA necesita recarga para el nuevo idioma
                     }, 0);
                 });
             });
 
-            // Cargar explícitamente el script de reCAPTCHA con el idioma actual (solo si no está)
+            // Carga explícita del script de reCAPTCHA con ?hl=en/es si Netlify aún no lo inyectó
             (function ensureRecaptchaLang() {
                 const exists = Array.from(document.scripts).some(s => (s.src || '').includes('/recaptcha/api.js'));
                 if (!exists) {
-                    const lang = currentLang();
                     const s = document.createElement('script');
-                    s.src = 'https://www.google.com/recaptcha/api.js?hl=' + (lang === 'en' ? 'en' : 'es');
+                    s.src = 'https://www.google.com/recaptcha/api.js?hl=' + (currentLang() === 'en' ? 'en' : 'es');
                     s.async = true;
                     s.defer = true;
-                    s.setAttribute('data-recaptcha', '1');
                     document.body.appendChild(s);
                 }
             })();
         });
     </script>
 
-    <!-- Shadow form (garantiza detección en Netlify aunque el form principal se renderice distinto) -->
+    <!-- Shadow form (para detección de Netlify) -->
     <form name="contacto" netlify netlify-honeypot="bot-field" hidden>
         <input type="text" name="name" />
         <input type="email" name="email" />
