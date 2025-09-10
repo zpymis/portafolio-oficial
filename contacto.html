@@ -13,7 +13,6 @@
             var k = "site:lang";
             var saved = null;
             try { saved = localStorage.getItem(k); } catch (e) { }
-
             var nav = (navigator.language || "es").toLowerCase();
             var lang = (saved === "en" || saved === "es") ? saved : (nav.startsWith("es") ? "es" : "en");
             document.documentElement.classList.add("lang-" + lang);
@@ -184,18 +183,18 @@
                                         <input id="name" type="text" class="form__input" name="name" required
                                             minlength="2" maxlength="80" pattern="[A-Za-zÀ-ÖØ-öø-ÿ.'\- ]{2,}"
                                             title="Escribe tu nombre (solo letras y espacios)." aria-required="true"
-                                            data-i18n="contact.form.name" data-i18n-attr="placeholder,aria-label"
-                                            placeholder="Nombre" autocomplete="name" />
+                                            data-i18n="contact.form.name" data-i18n-attr="placeholder,aria-label,title"
+                                            placeholder="Name" autocomplete="name" />
                                         <label for="name" class="form__label"
-                                            data-i18n="contact.form.nameLabel">Nombre</label>
+                                            data-i18n="contact.form.nameLabel">Name</label>
                                     </div>
 
                                     <div class="form__group">
                                         <!-- EMAIL -->
                                         <input id="email" type="email" class="form__input" name="email" required
-                                            inputmode="email" autocomplete="email" aria-required="true"
-                                            data-i18n="contact.form.email" data-i18n-attr="placeholder,aria-label"
-                                            placeholder="Email" />
+                                            inputmode="email" autocomplete="email" title="Ingresa un correo válido."
+                                            aria-required="true" data-i18n="contact.form.email"
+                                            data-i18n-attr="placeholder,aria-label,title" placeholder="Email" />
                                         <label for="email" class="form__label"
                                             data-i18n="contact.form.emailLabel">Email</label>
                                     </div>
@@ -203,11 +202,12 @@
                                     <div class="form__group">
                                         <!-- ASUNTO -->
                                         <input id="subject" type="text" class="form__input" name="subject" required
-                                            minlength="4" maxlength="120" aria-required="true"
-                                            data-i18n="contact.form.subject" data-i18n-attr="placeholder,aria-label"
-                                            placeholder="Asunto" />
+                                            minlength="4" maxlength="120"
+                                            title="Escribe un asunto (mínimo 4 caracteres)." aria-required="true"
+                                            data-i18n="contact.form.subject"
+                                            data-i18n-attr="placeholder,aria-label,title" placeholder="Subject" />
                                         <label for="subject" class="form__label"
-                                            data-i18n="contact.form.subjectLabel">Asunto</label>
+                                            data-i18n="contact.form.subjectLabel">Subject</label>
                                     </div>
                                 </section>
 
@@ -215,19 +215,24 @@
                                     <div class="form__group form__group--textarea">
                                         <!-- MENSAJE -->
                                         <textarea id="message" class="form__input form__input--textarea" name="message"
-                                            required minlength="10" maxlength="1000" aria-required="true"
-                                            data-i18n="contact.form.message" data-i18n-attr="placeholder,aria-label"
-                                            placeholder="Mensaje"></textarea>
+                                            required minlength="10" maxlength="1000"
+                                            title="Cuéntame los detalles de tu proyecto." aria-required="true"
+                                            data-i18n="contact.form.message"
+                                            data-i18n-attr="placeholder,aria-label,title"
+                                            placeholder="Message"></textarea>
                                         <label for="message" class="form__label"
-                                            data-i18n="contact.form.messageLabel">Mensaje</label>
+                                            data-i18n="contact.form.messageLabel">Message</label>
                                     </div>
                                 </section>
                             </div>
+
+                            <!-- reCAPTCHA de Netlify -->
                             <div class="form__group form__group--captcha">
                                 <div data-netlify-recaptcha="true"></div>
                             </div>
+
                             <input type="submit" class="form__button" data-i18n="contact.form.submit"
-                                data-i18n-attr="value" value="Enviar mensaje" />
+                                data-i18n-attr="value" value="Send message" />
                         </form>
                     </section>
                 </div>
@@ -235,32 +240,111 @@
         </main>
     </div>
 
-    <!-- Mensajes de error personalizados y prevención de doble submit -->
+    <!-- Validación i18n + control de reCAPTCHA + carga del captcha en idioma actual -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.querySelector('.contact__form');
-            if (!form) return;
+            const submitBtn = form?.querySelector('.form__button');
+            const captchaGroup = document.querySelector('.form__group--captcha');
 
-            const msgs = {
-                name: 'Escribe tu nombre (solo letras y espacios, mínimo 2).',
-                email: 'Ingresa un email válido.',
-                subject: 'Escribe un asunto (mínimo 4 caracteres).',
-                message: 'Escribe un mensaje (mínimo 10 caracteres).'
-            };
+            // Helpers i18n
+            const T = (key, fb) =>
+                (window.i18n && typeof i18n.t === 'function' && i18n.t(key)) || fb;
 
+            const currentLang = () =>
+                (window.i18n && typeof i18n.current === 'function' && i18n.current()) ||
+                document.documentElement.getAttribute('lang') || 'es';
+
+            function buildMsgs() {
+                return {
+                    name: T('contact.form.errors.name', 'Escribe tu nombre (solo letras y espacios, mínimo 2).'),
+                    email: T('contact.form.errors.email', 'Ingresa un email válido.'),
+                    subject: T('contact.form.errors.subject', 'Escribe un asunto (mínimo 4 caracteres).'),
+                    message: T('contact.form.errors.message', 'Escribe un mensaje (mínimo 10 caracteres).'),
+                    default: T('contact.form.errors.default', 'Completa este campo.'),
+                    recaptcha: T('contact.form.errors.recaptcha', 'Marca “No soy un robot” antes de enviar.')
+                };
+            }
+            let MSG = buildMsgs();
+
+            // Mensajes personalizados por campo
             form.querySelectorAll('input[required], textarea[required]').forEach(el => {
                 el.addEventListener('input', () => el.setCustomValidity(''));
                 el.addEventListener('invalid', () => {
                     const id = el.id;
-                    el.setCustomValidity(msgs[id] || 'Completa este campo.');
+                    el.setCustomValidity(MSG[id] || MSG.default);
                 });
             });
 
-            form.addEventListener('submit', () => {
-                form.querySelector('.form__button')?.setAttribute('disabled', 'true');
+            // reCAPTCHA utils
+            function getCaptchaResponse() {
+                try {
+                    if (window.grecaptcha && typeof grecaptcha.getResponse === 'function') {
+                        return grecaptcha.getResponse(); // no-vacío si está resuelto
+                    }
+                    const r = document.querySelector('.g-recaptcha-response');
+                    return r ? r.value : '';
+                } catch (_) { return ''; }
+            }
+
+            let captchaErrorEl = null;
+            function showCaptchaError() {
+                if (!captchaErrorEl) {
+                    captchaErrorEl = document.createElement('p');
+                    captchaErrorEl.className = 'form__error';
+                    captchaErrorEl.style.color = 'var(--color-secondary)';
+                    captchaErrorEl.style.margin = '0 0 1rem';
+                    captchaGroup?.appendChild(captchaErrorEl);
+                }
+                captchaErrorEl.textContent = MSG.recaptcha;
+            }
+            function clearCaptchaError() {
+                if (captchaErrorEl) captchaErrorEl.textContent = '';
+            }
+
+            // Evita limpiar el formulario si falta el captcha
+            form.addEventListener('submit', (e) => {
+                clearCaptchaError();
+                const solved = !!getCaptchaResponse();
+                if (!solved) {
+                    e.preventDefault();
+                    showCaptchaError();
+                    submitBtn?.removeAttribute('disabled'); // no bloquear si no se envió
+                    captchaGroup?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    // Envío real: evita doble submit
+                    submitBtn?.setAttribute('disabled', 'true');
+                }
             });
+
+            // Si cambias de idioma, actualiza mensajes y recarga para que reCAPTCHA cambie de idioma
+            document.querySelectorAll('[data-lang]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    setTimeout(() => {
+                        MSG = buildMsgs();
+                        clearCaptchaError();
+                        location.reload(); // fuerza que el widget reCAPTCHA se renderice en el nuevo idioma
+                    }, 0);
+                });
+            });
+
+            // Cargar explícitamente el script de reCAPTCHA con el idioma actual (solo si no está)
+            (function ensureRecaptchaLang() {
+                const exists = Array.from(document.scripts).some(s => (s.src || '').includes('/recaptcha/api.js'));
+                if (!exists) {
+                    const lang = currentLang();
+                    const s = document.createElement('script');
+                    s.src = 'https://www.google.com/recaptcha/api.js?hl=' + (lang === 'en' ? 'en' : 'es');
+                    s.async = true;
+                    s.defer = true;
+                    s.setAttribute('data-recaptcha', '1');
+                    document.body.appendChild(s);
+                }
+            })();
         });
     </script>
+
+    <!-- Shadow form (garantiza detección en Netlify aunque el form principal se renderice distinto) -->
     <form name="contacto" netlify netlify-honeypot="bot-field" hidden>
         <input type="text" name="name" />
         <input type="email" name="email" />

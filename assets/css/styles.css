@@ -728,3 +728,9 @@ html {
   margin-bottom: 1.5rem;
   margin-top: 1.5rem;
 }
+
+.form__error {
+  font-size: 1.3rem;
+  line-height: 1.6rem;
+  margin-top: 0.5rem;
+}
