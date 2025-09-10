@@ -7,23 +7,18 @@
 
     <title data-i18n="meta.contact.title">Contacto — Missael Rangel</title>
     <meta name="description" data-i18n="meta.contact.description" data-i18n-attr="content" />
+
     <script>
         (function () {
             var k = "site:lang";
             var saved = null;
-            try { saved = localStorage.getItem(k); } catch (e) { /* ignore */ }
+            try { saved = localStorage.getItem(k); } catch (e) { }
 
             var nav = (navigator.language || "es").toLowerCase();
-            var lang = (saved === "en" || saved === "es")
-                ? saved
-                : (nav.startsWith("es") ? "es" : "en");
-
-            // Clase en <html> para que el CSS posicione la píldora antes del primer pintado
+            var lang = (saved === "en" || saved === "es") ? saved : (nav.startsWith("es") ? "es" : "en");
             document.documentElement.classList.add("lang-" + lang);
         })();
     </script>
-
-
 
     <!-- Estilos -->
     <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png" />
@@ -39,7 +34,7 @@
     <script defer src="assets/js/translations.js"></script>
     <script defer src="assets/js/i18n.js"></script>
 
-    <!-- Script JS -->
+    <!-- Scripts -->
     <script defer src="assets/js/menu.js"></script>
     <script defer src="assets/js/map.js"></script>
 </head>
@@ -66,21 +61,18 @@
                                 <span class="menu__overlay" data-i18n="nav.home">Inicio</span>
                             </a>
                         </li>
-
                         <li class="menu__option">
                             <a href="sobre-mi.html" class="menu__link">
                                 <i class="menu__icon fa-solid fa-user"></i>
                                 <span class="menu__overlay" data-i18n="nav.about">Sobre mí</span>
                             </a>
                         </li>
-
                         <li class="menu__option">
                             <a href="portafolio.html" class="menu__link">
                                 <i class="menu__icon fa-solid fa-briefcase"></i>
                                 <span class="menu__overlay" data-i18n="nav.portfolio">Portafolio</span>
                             </a>
                         </li>
-
                         <li class="menu__option">
                             <a href="contacto.html" class="menu__link menu__link--active" aria-current="page">
                                 <i class="menu__icon fa-solid fa-envelope"></i>
@@ -174,31 +166,46 @@
                             </h3>
                         </header>
 
-                        <form class="contact__form" method="POST" action="#">
+                        <!-- NETLIFY FORMS + VALIDACIÓN -->
+                        <form class="contact__form" name="contacto" method="POST" data-netlify="true"
+                            netlify-honeypot="bot-field" action="/gracias.html">
+
+                            <!-- Requeridos por Netlify -->
+                            <input type="hidden" name="form-name" value="contacto" />
+                            <p class="u-hidden" aria-hidden="true">
+                                <label>No llenes este campo: <input name="bot-field" tabindex="-1"
+                                        autocomplete="off" /></label>
+                            </p>
+
                             <div class="form__container">
                                 <section class="form__left">
                                     <div class="form__group">
+                                        <!-- NOMBRE -->
                                         <input id="name" type="text" class="form__input" name="name" required
-                                            aria-required="true" data-i18n="contact.form.name"
-                                            data-i18n-attr="placeholder,aria-label" placeholder="Nombre"
-                                            autocomplete="name" />
+                                            minlength="2" maxlength="80" pattern="[A-Za-zÀ-ÖØ-öø-ÿ.'\- ]{2,}"
+                                            title="Escribe tu nombre (solo letras y espacios)." aria-required="true"
+                                            data-i18n="contact.form.name" data-i18n-attr="placeholder,aria-label"
+                                            placeholder="Nombre" autocomplete="name" />
                                         <label for="name" class="form__label"
                                             data-i18n="contact.form.nameLabel">Nombre</label>
                                     </div>
 
                                     <div class="form__group">
+                                        <!-- EMAIL -->
                                         <input id="email" type="email" class="form__input" name="email" required
-                                            aria-required="true" data-i18n="contact.form.email"
-                                            data-i18n-attr="placeholder,aria-label" placeholder="Email"
-                                            autocomplete="email" />
+                                            inputmode="email" autocomplete="email" aria-required="true"
+                                            data-i18n="contact.form.email" data-i18n-attr="placeholder,aria-label"
+                                            placeholder="Email" />
                                         <label for="email" class="form__label"
                                             data-i18n="contact.form.emailLabel">Email</label>
                                     </div>
 
                                     <div class="form__group">
+                                        <!-- ASUNTO -->
                                         <input id="subject" type="text" class="form__input" name="subject" required
-                                            aria-required="true" data-i18n="contact.form.subject"
-                                            data-i18n-attr="placeholder,aria-label" placeholder="Asunto" />
+                                            minlength="4" maxlength="120" aria-required="true"
+                                            data-i18n="contact.form.subject" data-i18n-attr="placeholder,aria-label"
+                                            placeholder="Asunto" />
                                         <label for="subject" class="form__label"
                                             data-i18n="contact.form.subjectLabel">Asunto</label>
                                     </div>
@@ -206,15 +213,19 @@
 
                                 <section class="form__right">
                                     <div class="form__group form__group--textarea">
+                                        <!-- MENSAJE -->
                                         <textarea id="message" class="form__input form__input--textarea" name="message"
-                                            required aria-required="true" data-i18n="contact.form.message"
-                                            data-i18n-attr="placeholder,aria-label" placeholder="Mensaje"></textarea>
+                                            required minlength="10" maxlength="1000" aria-required="true"
+                                            data-i18n="contact.form.message" data-i18n-attr="placeholder,aria-label"
+                                            placeholder="Mensaje"></textarea>
                                         <label for="message" class="form__label"
                                             data-i18n="contact.form.messageLabel">Mensaje</label>
                                     </div>
                                 </section>
                             </div>
-
+                            <div class="form__group form__group--captcha">
+                                <div data-netlify-recaptcha="true"></div>
+                            </div>
                             <input type="submit" class="form__button" data-i18n="contact.form.submit"
                                 data-i18n-attr="value" value="Enviar mensaje" />
                         </form>
@@ -223,6 +234,33 @@
             </section>
         </main>
     </div>
+
+    <!-- Mensajes de error personalizados y prevención de doble submit -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('.contact__form');
+            if (!form) return;
+
+            const msgs = {
+                name: 'Escribe tu nombre (solo letras y espacios, mínimo 2).',
+                email: 'Ingresa un email válido.',
+                subject: 'Escribe un asunto (mínimo 4 caracteres).',
+                message: 'Escribe un mensaje (mínimo 10 caracteres).'
+            };
+
+            form.querySelectorAll('input[required], textarea[required]').forEach(el => {
+                el.addEventListener('input', () => el.setCustomValidity(''));
+                el.addEventListener('invalid', () => {
+                    const id = el.id;
+                    el.setCustomValidity(msgs[id] || 'Completa este campo.');
+                });
+            });
+
+            form.addEventListener('submit', () => {
+                form.querySelector('.form__button')?.setAttribute('disabled', 'true');
+            });
+        });
+    </script>
 </body>
 
 </html>

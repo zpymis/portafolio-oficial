@@ -10,6 +10,9 @@
   --color-border-reviews: #2a2a2c;
   --color-company: #8a8a8a;
   --color-background-contact: #18181a;
+  --input-bg: var(--color-principal); /* fondo de los inputs */
+  --input-text: var(--color-titles); /* color de texto dentro del input */
+  --input-placeholder: var(--color-icons);
 }
 
 /* ESTILOS GENERALES */
@@ -497,7 +500,8 @@ h4 {
   border-radius: 0.5rem;
   outline: none;
   box-shadow: 0 1rem 1rem -8px rgba(0, 0, 0, 0.1);
-  background-color: transparent;
+  background-color: var(--input-bg); /* <-- antes: transparent */
+  color: var(--input-text);
 }
 
 .form__input:focus {
@@ -693,4 +697,33 @@ html.lang-en .lang-toggle [data-lang="es"],
 html.lang-es .lang-toggle [data-lang="en"] {
   color: var(--color-subtitles);
   text-shadow: none;
+}
+
+/* ===== Fix autofill blanco en Chrome/Edge/Safari ===== */
+html {
+  color-scheme: dark;
+} /* ayuda a que controles nativos respeten tema oscuro */
+
+.form__input:-webkit-autofill,
+.form__input:-webkit-autofill:hover,
+.form__input:-webkit-autofill:focus,
+.form__input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--input-text);
+  box-shadow: 0 0 0 1000px var(--input-bg) inset !important; /* pinta el fondo oscuro */
+  transition: background-color 9999s ease-out, color 9999s ease-out;
+}
+
+/* Selectores estándar (Firefox y otros) */
+.form__input:autofill {
+  background-color: var(--input-bg) !important;
+  color: var(--input-text) !important;
+}
+
+.u-hidden {
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+.form__group--captcha {
+  margin-bottom: 1.5rem;
 }
