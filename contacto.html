@@ -167,8 +167,8 @@
                         </header>
 
                         <!-- NETLIFY FORMS + VALIDACIÓN -->
-                        <form class="contact__form" name="contacto" method="POST" data-netlify="true"
-                            netlify-honeypot="bot-field" action="/gracias.html">
+                        <form class="contact__form" name="contacto" method="POST" netlify data-netlify="true"
+                            netlify-honeypot="bot-field" action="gracias.html">
 
                             <!-- Requeridos por Netlify -->
                             <input type="hidden" name="form-name" value="contacto" />
@@ -261,6 +261,12 @@
             });
         });
     </script>
+    <form name="contacto" netlify netlify-honeypot="bot-field" hidden>
+        <input type="text" name="name" />
+        <input type="email" name="email" />
+        <input type="text" name="subject" />
+        <textarea name="message"></textarea>
+    </form>
 </body>
 
 </html>
