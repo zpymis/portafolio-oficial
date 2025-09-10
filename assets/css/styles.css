@@ -96,8 +96,8 @@ h4 {
   height: 100%;
   background-image: -webkit-repeating-radial-gradient(
     center center,
-    #fff,
-    #fff 1px,
+    var(--color-principal),
+    var(--color-principal) 1px,
     transparent 0px,
     transparent 100%
   );
@@ -303,26 +303,6 @@ h4 {
   position: relative;
 }
 
-.about__title::after,
-.portfolio__title::after,
-.contact__title::after {
-  content: "";
-  position: absolute;
-  top: 2rem;
-  right: -2.5rem;
-  width: 5rem;
-  height: 3rem;
-  background-image: -webkit-repeating-radial-gradient(
-    center center,
-    var(--color-secondary),
-    var(--color-secondary) 1px,
-    transparent 0px,
-    transparent 100%
-  );
-  background-size: 6px 6px;
-  opacity: 0.5;
-}
-
 .u-accent-strong {
   color: var(--color-secondary);
   font-weight: 700;
@@ -358,24 +338,6 @@ h4 {
 
 .form-header__title {
   font-size: 2.1rem;
-}
-
-.form-header__title::after {
-  content: "";
-  position: absolute;
-  top: 1.5rem;
-  right: 0;
-  width: 3rem;
-  height: 2rem;
-  background-image: -webkit-repeating-radial-gradient(
-    center center,
-    var(--color-secondary),
-    var(--color-secondary) 1px,
-    transparent 0px,
-    transparent 100%
-  );
-  background-size: 6px 6px;
-  opacity: 0.5;
 }
 
 .portfolio__articles {
