@@ -168,7 +168,8 @@
                         <!-- Netlify Forms + validación custom -->
                         <form class="contact__form" name="contacto" method="POST" data-netlify="true"
                             netlify-honeypot="bot-field" action="gracias.html" novalidate>
-                            <!-- Netlify -->
+
+                            <!-- Netlify / Honeypot -->
                             <input type="hidden" name="form-name" value="contacto" />
                             <p class="u-hidden" aria-hidden="true">
                                 <label>No llenes este campo: <input name="bot-field" tabindex="-1"
@@ -242,7 +243,7 @@
         </main>
     </div>
 
-    <!-- Validación i18n + control de reCAPTCHA + carga del captcha con idioma actual -->
+    <!-- Validación i18n + control de reCAPTCHA (sin recargar al cambiar idioma) -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.querySelector('.contact__form');
@@ -250,7 +251,9 @@
 
             const submitBtn = form.querySelector('.form__button');
             const captchaWrap = form.querySelector('.form__group--captcha');
+            const captchaErr = document.getElementById('recaptchaError');
 
+            // ---- i18n helpers ----
             const T = (key, fb) =>
                 (window.i18n && typeof i18n.t === 'function' && i18n.t(key)) || fb;
 
@@ -270,7 +273,8 @@
             }
             let MSG = buildMsgs();
 
-            const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+            // Regex robusta (en línea con el pattern del input)
+            const EMAIL_RE = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/;
 
             function validateField(el) {
                 const v = (el.value || '').trim();
@@ -290,11 +294,12 @@
                 return !msg;
             }
 
+            // Validación suave: no mostramos globitos al cambiar de campo
             form.querySelectorAll('input[required], textarea[required]').forEach(el => {
-                el.addEventListener('input', () => validateField(el));   // no bloquea navegación entre campos
-                el.addEventListener('blur', () => { if (!validateField(el)) el.reportValidity(); });
+                el.addEventListener('input', () => validateField(el));
             });
 
+            // reCAPTCHA utils
             function captchaResponse() {
                 try {
                     if (window.grecaptcha && typeof grecaptcha.getResponse === 'function') {
@@ -305,96 +310,61 @@
                 } catch { return ''; }
             }
 
-            let captchaErrorEl = null;
             function showCaptchaError() {
-                if (!captchaErrorEl) {
-                    captchaErrorEl = document.createElement('p');
-                    captchaErrorEl.className = 'form__error';
-                    captchaWrap.appendChild(captchaErrorEl);
-                }
-                captchaErrorEl.textContent = MSG.recaptcha;
+                if (!captchaErr) return;
+                captchaErr.textContent = MSG.recaptcha;
             }
             function clearCaptchaError() {
-                if (captchaErrorEl) captchaErrorEl.textContent = '';
+                if (!captchaErr) return;
+                captchaErr.textContent = '';
             }
 
             form.addEventListener('submit', (e) => {
                 clearCaptchaError();
-                const fields = Array.from(form.querySelectorAll('input[required], textarea[required]'));
-                let firstInvalid = null;
-                fields.forEach(el => { if (!validateField(el) && !firstInvalid) firstInvalid = el; });
 
+                const fields = Array.from(form.querySelectorAll('input[required], textarea[required]'));
+                const firstInvalid = fields.find(f => !validateField(f));
                 if (firstInvalid) {
                     e.preventDefault();
-                    firstInvalid.reportValidity();
+                    firstInvalid.reportValidity(); // globito SOLO aquí
                     firstInvalid.focus();
                     return;
                 }
+
                 if (!captchaResponse()) {
                     e.preventDefault();
                     showCaptchaError();
                     captchaWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     return;
                 }
-                submitBtn?.setAttribute('disabled', 'true');
+
+                submitBtn?.setAttribute('disabled', 'true'); // evita doble envío
             });
 
-            // ---------- SOLO reCAPTCHA dinámico (sin recargar la página) ----------
-            function loadRecaptchaScript(lang) {
-                // Elimina scripts previos
-                document.querySelectorAll('script[src*="/recaptcha/api.js"]').forEach(s => s.remove());
-                // Limpia widget y textarea oculto
-                captchaWrap.querySelectorAll('.g-recaptcha, iframe[src*="recaptcha"]').forEach(n => n.remove());
-                captchaWrap.querySelectorAll('.g-recaptcha-response').forEach(n => n.remove());
-                // Asegura el placeholder de Netlify
-                let placeholder = captchaWrap.querySelector('[data-netlify-recaptcha]');
-                if (!placeholder) {
-                    placeholder = document.createElement('div');
-                    placeholder.setAttribute('data-netlify-recaptcha', 'true');
-                    captchaWrap.appendChild(placeholder);
-                } else {
-                    placeholder.innerHTML = '';
-                }
-                // Carga script en el idioma deseado; Netlify lo renderiza automáticamente
-                const s = document.createElement('script');
-                s.src = 'https://www.google.com/recaptcha/api.js?hl=' + (lang === 'en' ? 'en' : 'es');
-                s.async = true;
-                s.defer = true;
-                document.body.appendChild(s);
-            }
-
-            // Carga inicial del reCAPTCHA en el idioma actual (por si el HTML no lo trajo)
-            (function ensureRecaptcha() {
-                const hasScript = Array.from(document.scripts).some(s => (s.src || '').includes('/recaptcha/api.js'));
-                if (!hasScript) loadRecaptchaScript(currentLang());
-            })();
-
-            // --------- Cambio de idioma SIN recargar (mantiene mapa e inputs) ---------
+            // Cambio de idioma sin recargar: actualiza textos de validación (NO re-renderiza reCAPTCHA)
             document.querySelectorAll('.lang-toggle__btn[data-lang]').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    // Deja que i18n.js cambie textos/atributos primero
                     setTimeout(() => {
-                        // Actualiza mensajes de validación al nuevo idioma
                         MSG = buildMsgs();
                         clearCaptchaError();
-                        // Re-pinta ÚNICAMENTE el reCAPTCHA en el nuevo idioma
-                        const newLang = (btn.dataset.lang === 'en') ? 'en' : 'es';
-                        loadRecaptchaScript(newLang);
-                        // Importante: NO recargamos la página → se conservan mapa e inputs
                     }, 0);
                 });
             });
+
+            // Carga reCAPTCHA una sola vez, en el idioma actual
+            (function ensureRecaptcha() {
+                const hasScript = Array.from(document.scripts).some(s => (s.src || '').includes('/recaptcha/api.js'));
+                if (!hasScript) {
+                    const lang = currentLang() === 'en' ? 'en' : 'es';
+                    const s = document.createElement('script');
+                    s.src = 'https://www.google.com/recaptcha/api.js?hl=' + lang;
+                    s.async = true;
+                    s.defer = true;
+                    document.body.appendChild(s);
+                }
+            })();
         });
     </script>
-
-
-    <!-- Shadow form para detección de Netlify -->
-    <form name="contacto" netlify netlify-honeypot="bot-field" hidden>
-        <input type="text" name="name" />
-        <input type="email" name="email" />
-        <input type="text" name="subject" />
-        <textarea name="message"></textarea>
-    </form>
 </body>
 
 </html>
