@@ -353,67 +353,15 @@
 
             // Carga reCAPTCHA una sola vez, en el idioma actual
             (function ensureRecaptcha() {
-                const captchaWrap = document.querySelector('.form__group--captcha');
-
-                // 1) Resolver el idioma real (prioriza localStorage)
-                function resolveLang() {
-                    try {
-                        const saved = localStorage.getItem('site:lang');
-                        if (saved === 'en' || saved === 'es') return saved;
-                    } catch (_) { }
-
-                    const html = document.documentElement;
-                    if (html.classList.contains('lang-en')) return 'en';
-                    if (html.classList.contains('lang-es')) return 'es';
-
-                    const attr = (html.getAttribute('lang') || '').toLowerCase();
-                    if (attr.startsWith('en')) return 'en';
-                    if (attr.startsWith('es')) return 'es';
-
-                    const nav = (navigator.language || '').toLowerCase();
-                    return nav.startsWith('en') ? 'en' : 'es';
+                const hasScript = Array.from(document.scripts).some(s => (s.src || '').includes('/recaptcha/api.js'));
+                if (!hasScript) {
+                    const lang = currentLang() === 'en' ? 'en' : 'es';
+                    const s = document.createElement('script');
+                    s.src = 'https://www.google.com/recaptcha/api.js?hl=' + lang;
+                    s.async = true;
+                    s.defer = true;
+                    document.body.appendChild(s);
                 }
-
-                const want = resolveLang();
-
-                // 2) Si hay un script ya cargado pero con otro idioma, lo reemplazamos
-                function getCurrentRecaptchaLang() {
-                    const s = document.querySelector('script[src*="/recaptcha/api.js"]');
-                    if (!s) return null;
-                    try { return new URL(s.src).searchParams.get('hl') || null; } catch { return null; }
-                }
-
-                const current = getCurrentRecaptchaLang();
-                const hasScript = !!document.querySelector('script[src*="/recaptcha/api.js"]');
-
-                if (!hasScript || (current && current !== want)) {
-                    // Elimina script(s) previos y cualquier rastro del widget
-                    document.querySelectorAll('script[src*="/recaptcha/api.js"]').forEach(s => s.remove());
-                    captchaWrap?.querySelectorAll('.g-recaptcha, iframe[src*="recaptcha"], textarea.g-recaptcha-response')
-                        .forEach(n => n.remove());
-
-                    // Asegura el placeholder de Netlify
-                    let ph = captchaWrap?.querySelector('[data-netlify-recaptcha]');
-                    if (!ph && captchaWrap) {
-                        ph = document.createElement('div');
-                        ph.setAttribute('data-netlify-recaptcha', 'true');
-                        captchaWrap.appendChild(ph);
-                    } else if (ph) {
-                        ph.innerHTML = '';
-                    }
-
-                    // 3) Fuerza idioma ANTES de cargar el script (truco oficial)
-                    window.___grecaptcha_cfg = window.___grecaptcha_cfg || {};
-                    window.___grecaptcha_cfg.lang = want;
-
-                    // 4) Carga el script con hl=...
-                    const scr = document.createElement('script');
-                    scr.src = 'https://www.google.com/recaptcha/api.js?hl=' + want;
-                    scr.async = true;
-                    scr.defer = true;
-                    document.body.appendChild(scr);
-                }
-                // Si ya había script y el idioma coincide, no hacemos nada.
             })();
         });
     </script>
