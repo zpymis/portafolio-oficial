@@ -354,33 +354,14 @@
             // Carga reCAPTCHA una sola vez, en el idioma actual
             (function ensureRecaptcha() {
                 const hasScript = Array.from(document.scripts).some(s => (s.src || '').includes('/recaptcha/api.js'));
-                if (hasScript) return;
-
-                // Resolver idioma de forma robusta
-                function resolveLang() {
-                    try {
-                        const saved = localStorage.getItem('site:lang');
-                        if (saved === 'en' || saved === 'es') return saved;
-                    } catch (_) { }
-
-                    const html = document.documentElement;
-                    if (html.classList.contains('lang-en')) return 'en';
-                    if (html.classList.contains('lang-es')) return 'es';
-
-                    const attr = (html.getAttribute('lang') || '').toLowerCase();
-                    if (attr.startsWith('en')) return 'en';
-                    if (attr.startsWith('es')) return 'es';
-
-                    const nav = (navigator.language || '').toLowerCase();
-                    return nav.startsWith('en') ? 'en' : 'es';
+                if (!hasScript) {
+                    const lang = currentLang() === 'en' ? 'en' : 'es';
+                    const s = document.createElement('script');
+                    s.src = 'https://www.google.com/recaptcha/api.js?hl=' + lang;
+                    s.async = true;
+                    s.defer = true;
+                    document.body.appendChild(s);
                 }
-
-                const lang = resolveLang();
-                const s = document.createElement('script');
-                s.src = 'https://www.google.com/recaptcha/api.js?hl=' + lang;
-                s.async = true;
-                s.defer = true;
-                document.body.appendChild(s);
             })();
         });
     </script>
