@@ -165,11 +165,10 @@
                             </h3>
                         </header>
 
-                        <!-- NETLIFY FORMS + VALIDACIÓN -->
-                        <form class="contact__form" name="contacto" method="POST" netlify data-netlify="true"
+                        <!-- Netlify Forms + validación custom -->
+                        <form class="contact__form" name="contacto" method="POST" data-netlify="true"
                             netlify-honeypot="bot-field" action="gracias.html" novalidate>
-
-                            <!-- Requeridos por Netlify -->
+                            <!-- Netlify -->
                             <input type="hidden" name="form-name" value="contacto" />
                             <p class="u-hidden" aria-hidden="true">
                                 <label>No llenes este campo: <input name="bot-field" tabindex="-1"
@@ -192,10 +191,11 @@
                                     <div class="form__group">
                                         <!-- EMAIL -->
                                         <input id="email" type="email" class="form__input" name="email" required
-                                            inputmode="email" autocomplete="email"
-                                            pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$" title="Ingresa un correo válido."
-                                            aria-required="true" data-i18n="contact.form.email"
-                                            data-i18n-attr="placeholder,aria-label,title" placeholder="Email" />
+                                            inputmode="email" autocomplete="email" maxlength="254"
+                                            pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$"
+                                            title="Ingresa un correo válido." aria-required="true"
+                                            data-i18n="contact.form.email" data-i18n-attr="placeholder,aria-label,title"
+                                            placeholder="Email" />
                                         <label for="email" class="form__label"
                                             data-i18n="contact.form.emailLabel">Email</label>
                                     </div>
@@ -230,6 +230,7 @@
                             <!-- reCAPTCHA de Netlify -->
                             <div class="form__group form__group--captcha">
                                 <div data-netlify-recaptcha="true"></div>
+                                <p class="form__error" id="recaptchaError" role="alert" aria-live="polite"></p>
                             </div>
 
                             <input type="submit" class="form__button" data-i18n="contact.form.submit"
@@ -241,7 +242,7 @@
         </main>
     </div>
 
-    <!-- Validación i18n + control de reCAPTCHA + carga del captcha en idioma actual -->
+    <!-- Validación i18n + control de reCAPTCHA + carga del captcha con idioma actual -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.querySelector('.contact__form');
@@ -249,15 +250,15 @@
 
             const submitBtn = form.querySelector('.form__button');
             const captchaWrap = form.querySelector('.form__group--captcha');
+            const captchaErr = document.getElementById('recaptchaError');
 
-            // --- helpers i18n ---
+            // ---- i18n helpers ----
             const T = (key, fb) =>
                 (window.i18n && typeof i18n.t === 'function' && i18n.t(key)) || fb;
 
             const currentLang = () =>
                 (window.i18n && typeof i18n.current === 'function' && i18n.current()) ||
-                document.documentElement.getAttribute('lang') ||
-                'es';
+                document.documentElement.getAttribute('lang') || 'es';
 
             function buildMsgs() {
                 return {
@@ -271,8 +272,8 @@
             }
             let MSG = buildMsgs();
 
-            // --- validadores por campo (control total, sin mensajes nativos) ---
-            const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+            // ---- validación custom (sin “globos” en blur) ----
+            const EMAIL_RE = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/;
 
             function validateField(el) {
                 const v = (el.value || '').trim();
@@ -301,62 +302,46 @@
                 return !msg;
             }
 
-            // Validar en tiempo real (sin estilos inline ni !important)
+            // Solo limpiamos/validamos mientras escribe. Nada de reportValidity() en blur.
             form.querySelectorAll('input[required], textarea[required]').forEach(el => {
-                el.addEventListener('input', () => {
-                    validateField(el);
-                    // no mostramos globo en cada tecla; sólo limpiamos el mensaje personalizado
-                    // el globo se mostrará cuando llamemos a reportValidity() (blur/submit)
-                });
-                el.addEventListener('blur', () => {
-                    if (!validateField(el)) el.reportValidity();
-                });
+                el.addEventListener('input', () => validateField(el));
             });
 
-            // --- reCAPTCHA helpers ---
+            // ---- reCAPTCHA helpers ----
             function captchaResponse() {
                 try {
                     if (window.grecaptcha && typeof grecaptcha.getResponse === 'function') {
-                        return grecaptcha.getResponse(); // string no vacío si marcado
+                        return grecaptcha.getResponse(); // no-vacío si está resuelto
                     }
                     const t = document.querySelector('.g-recaptcha-response');
                     return t ? t.value : '';
                 } catch (_) { return ''; }
             }
 
-            let captchaErrorEl = null;
             function showCaptchaError() {
-                if (!captchaErrorEl) {
-                    captchaErrorEl = document.createElement('p');
-                    captchaErrorEl.className = 'form__error';
-                    captchaWrap.appendChild(captchaErrorEl);
-                }
-                captchaErrorEl.textContent = MSG.recaptcha;
+                if (!captchaErr) return;
+                captchaErr.textContent = MSG.recaptcha;
             }
             function clearCaptchaError() {
-                if (captchaErrorEl) captchaErrorEl.textContent = '';
+                if (!captchaErr) return;
+                captchaErr.textContent = '';
             }
 
-            // --- submit ---
+            // ---- submit ----
             form.addEventListener('submit', (e) => {
                 clearCaptchaError();
 
                 // 1) valida todos los campos
                 const fields = Array.from(form.querySelectorAll('input[required], textarea[required]'));
-                let firstInvalid = null;
-                fields.forEach(el => {
-                    const ok = validateField(el);
-                    if (!ok && !firstInvalid) firstInvalid = el;
-                });
-
+                const firstInvalid = fields.find(f => !validateField(f));
                 if (firstInvalid) {
                     e.preventDefault();
-                    firstInvalid.reportValidity(); // globo con NUESTRO mensaje (i18n)
+                    firstInvalid.reportValidity(); // mostramos el globo SOLO aquí
                     firstInvalid.focus();
                     return;
                 }
 
-                // 2) reCAPTCHA marcado
+                // 2) reCAPTCHA
                 if (!captchaResponse()) {
                     e.preventDefault();
                     showCaptchaError();
@@ -368,7 +353,7 @@
                 submitBtn?.setAttribute('disabled', 'true');
             });
 
-            // Recargar en cambio de idioma para que reCAPTCHA se pinte en ES/EN
+            // Cambiar idioma -> recargar para que el widget se pinte en ES/EN
             document.querySelectorAll('[data-lang]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     setTimeout(() => {
@@ -379,7 +364,7 @@
                 });
             });
 
-            // Cargar reCAPTCHA en el idioma actual si no está cargado aún
+            // Cargar reCAPTCHA en el idioma actual si no está
             (function ensureRecaptchaLang() {
                 const exists = Array.from(document.scripts).some(s => (s.src || '').includes('/recaptcha/api.js'));
                 if (!exists) {
@@ -394,7 +379,7 @@
         });
     </script>
 
-    <!-- Shadow form (garantiza detección en Netlify aunque el form principal se renderice distinto) -->
+    <!-- Shadow form para detección de Netlify -->
     <form name="contacto" netlify netlify-honeypot="bot-field" hidden>
         <input type="text" name="name" />
         <input type="email" name="email" />

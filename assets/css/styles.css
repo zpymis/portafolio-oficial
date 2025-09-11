@@ -732,14 +732,22 @@ html {
   margin-top: 0.6rem;
 }
 
-/* --- Evitar "cuadritos" del reCAPTCHA que deja visible el reset --- */
-.contact__form textarea.g-recaptcha-response {
-  display: none;
-  position: absolute;
-  left: -9999px;
-  width: 0;
-  height: 0;
-  overflow: hidden;
+/* Garantiza que cualquier [hidden] realmente no se renderice */
+[hidden] {
+  display: none !important;
+}
+
+/* Oculta por completo la textarea que inyecta reCAPTCHA v2 (evita “cuadritos” abajo a la izquierda) */
+textarea.g-recaptcha-response {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
 }
 
 /* Espaciado del bloque captcha */
