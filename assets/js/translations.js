@@ -91,7 +91,7 @@ window.TRANSLATIONS = {
         },
         nameLabel: "Nombre",
         email: { placeholder: "Email", title: "Ingresa un correo válido." },
-        emailLabel: "Email",
+        emailLabel: "Correo",
         subject: {
           placeholder: "Asunto",
           title: "Escribe un asunto (mínimo 4 caracteres).",
