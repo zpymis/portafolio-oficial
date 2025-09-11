@@ -167,7 +167,7 @@
 
                         <!-- NETLIFY FORMS + VALIDACIÓN -->
                         <form class="contact__form" name="contacto" method="POST" netlify data-netlify="true"
-                            netlify-honeypot="bot-field" action="gracias.html">
+                            netlify-honeypot="bot-field" action="gracias.html" novalidate>
 
                             <!-- Requeridos por Netlify -->
                             <input type="hidden" name="form-name" value="contacto" />
@@ -192,7 +192,8 @@
                                     <div class="form__group">
                                         <!-- EMAIL -->
                                         <input id="email" type="email" class="form__input" name="email" required
-                                            inputmode="email" autocomplete="email" title="Ingresa un correo válido."
+                                            inputmode="email" autocomplete="email"
+                                            pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$" title="Ingresa un correo válido."
                                             aria-required="true" data-i18n="contact.form.email"
                                             data-i18n-attr="placeholder,aria-label,title" placeholder="Email" />
                                         <label for="email" class="form__label"
@@ -244,16 +245,19 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.querySelector('.contact__form');
-            const submitBtn = form?.querySelector('.form__button');
-            const captchaGroup = document.querySelector('.form__group--captcha');
+            if (!form) return;
 
-            // Helpers i18n
+            const submitBtn = form.querySelector('.form__button');
+            const captchaWrap = form.querySelector('.form__group--captcha');
+
+            // --- helpers i18n ---
             const T = (key, fb) =>
                 (window.i18n && typeof i18n.t === 'function' && i18n.t(key)) || fb;
 
             const currentLang = () =>
                 (window.i18n && typeof i18n.current === 'function' && i18n.current()) ||
-                document.documentElement.getAttribute('lang') || 'es';
+                document.documentElement.getAttribute('lang') ||
+                'es';
 
             function buildMsgs() {
                 return {
@@ -267,23 +271,56 @@
             }
             let MSG = buildMsgs();
 
-            // Mensajes personalizados por campo
+            // --- validadores por campo (control total, sin mensajes nativos) ---
+            const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+            function validateField(el) {
+                const v = (el.value || '').trim();
+                let msg = '';
+
+                if (el.required && !v) {
+                    msg = MSG.default;
+                } else {
+                    switch (el.id) {
+                        case 'name':
+                            if (v.length < 2) msg = MSG.name;
+                            break;
+                        case 'email':
+                            if (!EMAIL_RE.test(v)) msg = MSG.email;
+                            break;
+                        case 'subject':
+                            if (v.length < 4) msg = MSG.subject;
+                            break;
+                        case 'message':
+                            if (v.length < 10) msg = MSG.message;
+                            break;
+                    }
+                }
+
+                el.setCustomValidity(msg);
+                return !msg;
+            }
+
+            // Validar en tiempo real (sin estilos inline ni !important)
             form.querySelectorAll('input[required], textarea[required]').forEach(el => {
-                el.addEventListener('input', () => el.setCustomValidity(''));
-                el.addEventListener('invalid', () => {
-                    const id = el.id;
-                    el.setCustomValidity(MSG[id] || MSG.default);
+                el.addEventListener('input', () => {
+                    validateField(el);
+                    // no mostramos globo en cada tecla; sólo limpiamos el mensaje personalizado
+                    // el globo se mostrará cuando llamemos a reportValidity() (blur/submit)
+                });
+                el.addEventListener('blur', () => {
+                    if (!validateField(el)) el.reportValidity();
                 });
             });
 
-            // reCAPTCHA utils
-            function getCaptchaResponse() {
+            // --- reCAPTCHA helpers ---
+            function captchaResponse() {
                 try {
                     if (window.grecaptcha && typeof grecaptcha.getResponse === 'function') {
-                        return grecaptcha.getResponse(); // no-vacío si está resuelto
+                        return grecaptcha.getResponse(); // string no vacío si marcado
                     }
-                    const r = document.querySelector('.g-recaptcha-response');
-                    return r ? r.value : '';
+                    const t = document.querySelector('.g-recaptcha-response');
+                    return t ? t.value : '';
                 } catch (_) { return ''; }
             }
 
@@ -292,9 +329,7 @@
                 if (!captchaErrorEl) {
                     captchaErrorEl = document.createElement('p');
                     captchaErrorEl.className = 'form__error';
-                    captchaErrorEl.style.color = 'var(--color-secondary)';
-                    captchaErrorEl.style.margin = '0 0 1rem';
-                    captchaGroup?.appendChild(captchaErrorEl);
+                    captchaWrap.appendChild(captchaErrorEl);
                 }
                 captchaErrorEl.textContent = MSG.recaptcha;
             }
@@ -302,33 +337,49 @@
                 if (captchaErrorEl) captchaErrorEl.textContent = '';
             }
 
-            // Evita limpiar el formulario si falta el captcha
+            // --- submit ---
             form.addEventListener('submit', (e) => {
                 clearCaptchaError();
-                const solved = !!getCaptchaResponse();
-                if (!solved) {
+
+                // 1) valida todos los campos
+                const fields = Array.from(form.querySelectorAll('input[required], textarea[required]'));
+                let firstInvalid = null;
+                fields.forEach(el => {
+                    const ok = validateField(el);
+                    if (!ok && !firstInvalid) firstInvalid = el;
+                });
+
+                if (firstInvalid) {
+                    e.preventDefault();
+                    firstInvalid.reportValidity(); // globo con NUESTRO mensaje (i18n)
+                    firstInvalid.focus();
+                    return;
+                }
+
+                // 2) reCAPTCHA marcado
+                if (!captchaResponse()) {
                     e.preventDefault();
                     showCaptchaError();
-                    submitBtn?.removeAttribute('disabled'); // no bloquear si no se envió
-                    captchaGroup?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                } else {
-                    // Envío real: evita doble submit
-                    submitBtn?.setAttribute('disabled', 'true');
+                    captchaWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return;
                 }
+
+                // 3) OK -> evitar doble envío
+                submitBtn?.setAttribute('disabled', 'true');
             });
 
-            // Si cambias de idioma, actualiza mensajes y recarga para que reCAPTCHA cambie de idioma
+            // Recargar en cambio de idioma para que reCAPTCHA se pinte en ES/EN
             document.querySelectorAll('[data-lang]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     setTimeout(() => {
                         MSG = buildMsgs();
                         clearCaptchaError();
-                        location.reload(); // fuerza que el widget reCAPTCHA se renderice en el nuevo idioma
+                        location.reload();
                     }, 0);
                 });
             });
 
-            // Cargar explícitamente el script de reCAPTCHA con el idioma actual (solo si no está)
+            // Cargar reCAPTCHA en el idioma actual si no está cargado aún
             (function ensureRecaptchaLang() {
                 const exists = Array.from(document.scripts).some(s => (s.src || '').includes('/recaptcha/api.js'));
                 if (!exists) {
@@ -337,7 +388,6 @@
                     s.src = 'https://www.google.com/recaptcha/api.js?hl=' + (lang === 'en' ? 'en' : 'es');
                     s.async = true;
                     s.defer = true;
-                    s.setAttribute('data-recaptcha', '1');
                     document.body.appendChild(s);
                 }
             })();

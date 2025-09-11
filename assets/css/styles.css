@@ -724,13 +724,25 @@ html {
   left: -9999px !important;
 }
 
-.form__group--captcha {
-  margin-bottom: 1.5rem;
-  margin-top: 1.5rem;
-}
-
+/* --- Errores del formulario (texto bajo el captcha/campos) --- */
 .form__error {
   font-size: 1.3rem;
   line-height: 1.6rem;
-  margin-top: 0.5rem;
+  color: var(--color-secondary);
+  margin-top: 0.6rem;
+}
+
+/* --- Evitar "cuadritos" del reCAPTCHA que deja visible el reset --- */
+.contact__form textarea.g-recaptcha-response {
+  display: none;
+  position: absolute;
+  left: -9999px;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* Espaciado del bloque captcha */
+.form__group--captcha {
+  margin-top: 1rem;
 }
