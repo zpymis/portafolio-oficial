@@ -267,9 +267,9 @@
 
             const submitBtn = form.querySelector('.form__button');
             const captchaWrap = form.querySelector('.form__group--captcha');
-            const captchaErr = document.getElementById('recaptchaError');
+            let captchaErr = document.getElementById('recaptchaError');
 
-            // ---------------- i18n helpers ----------------
+            // ---------- i18n helpers ----------
             const T = (key, fb) =>
                 (window.i18n && typeof i18n.t === 'function' && i18n.t(key)) || fb;
 
@@ -289,14 +289,13 @@
             }
             let MSG = buildMsgs();
 
-            // ---------------- Validación suave ----------------
+            // ---------- validación suave ----------
             const EMAIL_RE =
                 /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$/;
 
             function validateField(el) {
                 const v = (el.value || '').trim();
                 let msg = '';
-
                 if (el.required && !v) {
                     msg = MSG.default;
                 } else {
@@ -312,10 +311,10 @@
             }
 
             form.querySelectorAll('input[required], textarea[required]').forEach(el => {
-                el.addEventListener('input', () => validateField(el)); // no bloquea navegación entre campos
+                el.addEventListener('input', () => validateField(el));
             });
 
-            // ---------------- Utilidades CAPTCHA ----------------
+            // ---------- utils captcha ----------
             function captchaResponse() {
                 try {
                     if (window.grecaptcha && typeof grecaptcha.getResponse === 'function') {
@@ -325,74 +324,45 @@
                     return t ? t.value : '';
                 } catch { return ''; }
             }
-            function showCaptchaError() {
-                if (captchaErr) captchaErr.textContent = MSG.recaptcha;
-            }
-            function clearCaptchaError() {
-                if (captchaErr) captchaErr.textContent = '';
-            }
+            function showCaptchaError() { if (captchaErr) captchaErr.textContent = MSG.recaptcha; }
+            function clearCaptchaError() { if (captchaErr) captchaErr.textContent = ''; }
 
-            // ---------------- Submit ----------------
+            // ---------- submit ----------
             form.addEventListener('submit', (e) => {
                 clearCaptchaError();
-
                 const fields = Array.from(form.querySelectorAll('input[required], textarea[required]'));
                 const firstInvalid = fields.find(f => !validateField(f));
                 if (firstInvalid) {
                     e.preventDefault();
-                    firstInvalid.reportValidity();   // globito SOLO aquí
+                    firstInvalid.reportValidity();
                     firstInvalid.focus();
                     return;
                 }
-
                 if (!captchaResponse()) {
                     e.preventDefault();
                     showCaptchaError();
                     captchaWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     return;
                 }
-
-                submitBtn?.setAttribute('disabled', 'true'); // evita doble envío
+                submitBtn?.setAttribute('disabled', 'true');
             });
 
-            // ---------------- Carga inicial del reCAPTCHA en el idioma actual ----------------
-            (function ensureRecaptcha() {
-                const hasScript = Array.from(document.scripts).some(s => (s.src || '').includes('/recaptcha/api.js'));
-                if (!hasScript) {
-                    const lang = currentLang() === 'en' ? 'en' : 'es';
-                    const s = document.createElement('script');
-                    s.src = 'https://www.google.com/recaptcha/api.js?hl=' + lang;
-                    s.async = true;
-                    s.defer = true;
-                    document.body.appendChild(s);
-                }
-            })();
+            // =================================================================
+            //      reCAPTCHA: capturar sitekey y re-renderizar al cambiar idioma
+            // =================================================================
+            const RC = { sitekey: null, widgetId: null };
 
-            // ======================================================================
-            //           Cambio de idioma del reCAPTCHA sin recargar la página
-            //  Estrategia:
-            //   1) Capturamos una vez el sitekey que Netlify ya inyecta.
-            //   2) Al cambiar idioma, quitamos el script e iframes actuales,
-            //      cargamos el script con ?hl=NEW y renderizamos nosotros con grecaptcha.render.
-            // ======================================================================
-            const RC = {
-                sitekey: null,
-                container: null,   // contenedor donde (re)renderizamos
-                widgetId: null
-            };
-
-            // Espera hasta que Netlify haya renderizado el captcha y captura el sitekey
-            async function captureSitekeyOnce(timeout = 6000) {
+            // Captura una vez el sitekey desde el iframe inicial insertado por Netlify
+            async function captureSitekeyOnce(timeout = 10000) {
                 if (RC.sitekey) return true;
-
                 const ok = await waitFor(() => {
-                    // 1) Intenta del div .g-recaptcha
+                    // 1) del div .g-recaptcha si existe
                     const g = captchaWrap.querySelector('.g-recaptcha');
                     if (g && g.getAttribute('data-sitekey')) {
                         RC.sitekey = g.getAttribute('data-sitekey');
                         return true;
                     }
-                    // 2) Intenta extraer de la URL del iframe (param k=)
+                    // 2) del iframe (param k)
                     const ifr = captchaWrap.querySelector('iframe[src*="recaptcha"]');
                     if (ifr && ifr.src) {
                         try {
@@ -403,65 +373,7 @@
                     }
                     return false;
                 }, timeout);
-
-                // Prepara un contenedor propio (vacío) para futuros re-renders
-                if (ok && !RC.container) {
-                    RC.container = document.createElement('div');
-                    RC.container.id = 'recaptcha-container';
-                    captchaWrap.insertBefore(RC.container, captchaErr || null);
-                }
                 return ok;
-            }
-
-            // Quita el reCAPTCHA actual (scripts + iframes) y lo vuelve a montar en 'lang'
-            async function reloadRecaptcha(lang /* 'en' | 'es' */) {
-                const gotKey = await captureSitekeyOnce();
-                if (!gotKey || !RC.sitekey) {
-                    // No pudimos tomar el sitekey (por bloqueadores/extensiones). Salimos sin romper nada.
-                    return;
-                }
-
-                // 1) Quitar scripts previos de Google
-                document.querySelectorAll('script[src*="recaptcha/api.js"]').forEach(s => s.remove());
-
-                // 2) Eliminar widget actual y textarea oculta
-                captchaWrap.querySelectorAll('iframe[src*="recaptcha"], .g-recaptcha, .grecaptcha-badge').forEach(n => n.remove());
-                captchaWrap.querySelectorAll('.g-recaptcha-response').forEach(n => n.remove());
-
-                // 3) Resetear globals y fijar idioma deseado
-                try { delete window.grecaptcha; } catch { }
-                try { delete window.__google_recaptcha_client; } catch { }
-                window.___grecaptcha_cfg = window.___grecaptcha_cfg || {};
-                window.___grecaptcha_cfg.lang = (lang === 'en' ? 'en' : 'es');
-
-                // 4) Cargar script y renderizar explícitamente con nuestro sitekey
-                await loadScript('https://www.google.com/recaptcha/api.js?hl=' + (lang === 'en' ? 'en' : 'es'));
-
-                // Asegúrate de que grecaptcha está disponible y renderiza
-                if (window.grecaptcha && typeof grecaptcha.render === 'function' && RC.container) {
-                    RC.widgetId = grecaptcha.render(RC.container, {
-                        sitekey: RC.sitekey
-                        // theme: 'dark'  // descomenta si quieres tema oscuro explícito
-                    });
-                } else {
-                    // Reintento único si la carga fue lenta
-                    await loadScript('https://www.google.com/recaptcha/api.js?hl=' + (lang === 'en' ? 'en' : 'es'));
-                    if (window.grecaptcha && typeof grecaptcha.render === 'function' && RC.container) {
-                        RC.widgetId = grecaptcha.render(RC.container, { sitekey: RC.sitekey });
-                    }
-                }
-            }
-
-            function loadScript(src) {
-                return new Promise((resolve, reject) => {
-                    const s = document.createElement('script');
-                    s.src = src;
-                    s.async = true;
-                    s.defer = true;
-                    s.onload = resolve;
-                    s.onerror = reject;
-                    document.body.appendChild(s);
-                });
             }
 
             function waitFor(testFn, timeout = 2000, interval = 60) {
@@ -475,15 +387,69 @@
                 });
             }
 
-            // Hook al toggle de idioma (NO recargamos la página)
+            // Llama esto apenas cargue todo para tener el sitekey listo
+            window.addEventListener('load', () => { captureSitekeyOnce(); });
+
+            // Render explícito tras cambiar idioma
+            async function rerenderRecaptcha(lang) {
+                // Asegura que ya tenemos el sitekey; si no, espera y reintenta una vez
+                if (!RC.sitekey) {
+                    const got = await captureSitekeyOnce(12000);
+                    if (!got) return; // no rompemos nada si no se pudo
+                }
+
+                // 1) Limpia todo lo viejo y deja un contenedor limpio
+                const errHtml = `<p class="form__error" id="recaptchaError" role="alert" aria-live="polite">${captchaErr?.textContent || ''}</p>`;
+                captchaWrap.innerHTML = `<div id="recaptcha-container"></div>${errHtml}`;
+                // regraba la referencia del error (porque lo acabamos de reemplazar)
+                captchaErr = document.getElementById('recaptchaError');
+
+                // 2) Resetea globals y fija idioma
+                try { delete window.grecaptcha; } catch { }
+                try { delete window.__google_recaptcha_client; } catch { }
+                window.___grecaptcha_cfg = window.___grecaptcha_cfg || {};
+                window.___grecaptcha_cfg.lang = (lang === 'en' ? 'en' : 'es');
+
+                // 3) Carga la librería con render=explicit y callback global
+                const cbName = '__onRecaptchaReady';
+                window[cbName] = function () {
+                    try {
+                        RC.widgetId = grecaptcha.render('recaptcha-container', { sitekey: RC.sitekey });
+                    } catch { }
+                };
+
+                // borra scripts previos
+                document.querySelectorAll('script[src*="recaptcha/api.js"]').forEach(s => s.remove());
+
+                const s = document.createElement('script');
+                s.src = `https://www.google.com/recaptcha/api.js?render=explicit&onload=${cbName}&hl=${lang === 'en' ? 'en' : 'es'}`;
+                s.async = true;
+                s.defer = true;
+                document.body.appendChild(s);
+            }
+
+            // Carga inicial del script si no vino del <head>
+            (function ensureRecaptcha() {
+                const hasScript = Array.from(document.scripts).some(s => (s.src || '').includes('/recaptcha/api.js'));
+                if (!hasScript) {
+                    const lang = currentLang() === 'en' ? 'en' : 'es';
+                    // auto-render (Netlify) en primera carga
+                    const s = document.createElement('script');
+                    s.src = 'https://www.google.com/recaptcha/api.js?hl=' + lang;
+                    s.async = true;
+                    s.defer = true;
+                    document.body.appendChild(s);
+                }
+            })();
+
+            // Toggle de idioma: NO recargamos; re-render explícito con el nuevo idioma
             document.querySelectorAll('.lang-toggle__btn[data-lang]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const newLang = btn.dataset.lang === 'en' ? 'en' : 'es';
-                    // Deja que i18n.js actualice textos primero
-                    setTimeout(async () => {
+                    setTimeout(() => {
                         MSG = buildMsgs();
                         clearCaptchaError();
-                        await reloadRecaptcha(newLang);
+                        rerenderRecaptcha(newLang);
                     }, 0);
                 });
             });
