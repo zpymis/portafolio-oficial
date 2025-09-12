@@ -10,14 +10,31 @@
 
     <script>
         (function () {
-            var k = "site:lang";
+            var K = "site:lang";
             var saved = null;
-            try { saved = localStorage.getItem(k); } catch (e) { }
+            try { saved = localStorage.getItem(K); } catch (e) { }
+
             var nav = (navigator.language || "es").toLowerCase();
             var lang = (saved === "en" || saved === "es") ? saved : (nav.startsWith("es") ? "es" : "en");
-            document.documentElement.classList.add("lang-" + lang);
+
+            // Refleja el idioma en <html>
+            var html = document.documentElement;
+            html.classList.add("lang-" + lang);
+            html.setAttribute("lang", lang);
+
+            // Fuerza idioma de reCAPTCHA ANTES de cargar el script
+            window.___grecaptcha_cfg = window.___grecaptcha_cfg || {};
+            window.___grecaptcha_cfg.lang = (lang === "en" ? "en" : "es");
+
+            // Inyecta el script de reCAPTCHA con ?hl=...
+            var s = document.createElement("script");
+            s.src = "https://www.google.com/recaptcha/api.js?hl=" + (lang === "en" ? "en" : "es");
+            s.async = true;
+            s.defer = true;
+            document.head.appendChild(s);
         })();
     </script>
+
 
     <!-- Estilos -->
     <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png" />
@@ -350,19 +367,6 @@
                     }, 0);
                 });
             });
-
-            // Carga reCAPTCHA una sola vez, en el idioma actual
-            (function ensureRecaptcha() {
-                const hasScript = Array.from(document.scripts).some(s => (s.src || '').includes('/recaptcha/api.js'));
-                if (!hasScript) {
-                    const lang = currentLang() === 'en' ? 'en' : 'es';
-                    const s = document.createElement('script');
-                    s.src = 'https://www.google.com/recaptcha/api.js?hl=' + lang;
-                    s.async = true;
-                    s.defer = true;
-                    document.body.appendChild(s);
-                }
-            })();
         });
     </script>
 </body>
