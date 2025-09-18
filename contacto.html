@@ -7,9 +7,8 @@
 
     <title data-i18n="meta.contact.title">Contacto — Missael Rangel</title>
     <meta name="description"
-        content="Desarrollador web frontend en Guadalajara. Portafolio con proyectos en HTML, CSS, JavaScript y React, contacto y enlaces a redes."
-        data-i18n="meta.index.description" data-i18n-attr="content" />
-
+        content="¿Trabajamos juntos? Contáctame por correo o teléfono. Disponible en Guadalajara y remoto. Respondo rápido."
+        data-i18n="meta.contact.description" data-i18n-attr="content" />
     <script>
         (function () {
             var K = "site:lang";
@@ -47,6 +46,7 @@
     <link rel="stylesheet" href="assets/css/styles.css" />
     <link rel="stylesheet" href="assets/css/loader.css" />
     <link rel="stylesheet" href="assets/css/responsive.css" />
+    <link rel="canonical" href="https://missaelr.com/contacto.html">
 
     <!-- i18n -->
     <script defer src="assets/js/translations.js"></script>
@@ -185,8 +185,8 @@
                         </header>
 
                         <!-- Netlify Forms + validación custom -->
-                        <form class="contact__form" name="contacto" method="POST" data-netlify="true"
-                            netlify-honeypot="bot-field" action="gracias.html" novalidate>
+                        <form id="contactForm" class="contact__form" name="contacto" method="POST" data-netlify="true"
+                            netlify-honeypot="bot-field" accept-charset="UTF-8" novalidate>
 
                             <!-- Netlify / Honeypot -->
                             <input type="hidden" name="form-name" value="contacto" />
@@ -256,6 +256,13 @@
                             <input type="submit" class="form__button" data-i18n="contact.form.submit"
                                 data-i18n-attr="value" value="Send message" />
                         </form>
+                        <!-- Mensajes bajo el formulario -->
+                        <div class="form__notice" id="formSuccess" role="status" aria-live="polite" hidden>
+                            ¡Gracias! Tu mensaje fue enviado correctamente. Te responderé pronto.
+                        </div>
+                        <div class="form__notice form__notice--error" id="formError" role="alert" hidden>
+                            Ocurrió un problema al enviar el formulario. Inténtalo de nuevo.
+                        </div>
                     </section>
                 </div>
             </section>
