@@ -84,6 +84,7 @@ h4 {
 
 .user-info__image {
   width: 100%;
+  height: auto;
   background-color: var(--color-principal);
   border: 3px solid var(--color-principal);
   border-radius: 20rem;

@@ -3,30 +3,27 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <!-- Accesibilidad: no bloquear zoom -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title data-i18n="meta.about.title">Sobre mí — Missael Rangel</title>
     <meta name="description"
         content="Soy Missael Rangel, desarrollador web frontend. Enfoque en interfaces modernas, accesibles y responsivas con HTML, CSS, JS y React."
         data-i18n="meta.about.description" data-i18n-attr="content" />
+
+    <!-- Preconfigura idioma temprano -->
     <script>
         (function () {
             var k = "site:lang";
             var saved = null;
-            try { saved = localStorage.getItem(k); } catch (e) { /* ignore */ }
-
+            try { saved = localStorage.getItem(k); } catch (e) { }
             var nav = (navigator.language || "es").toLowerCase();
-            var lang = (saved === "en" || saved === "es")
-                ? saved
-                : (nav.startsWith("es") ? "es" : "en");
-
-            // Clase en <html> para que el CSS posicione la píldora antes del primer pintado
+            var lang = (saved === "en" || saved === "es") ? saved : (nav.startsWith("es") ? "es" : "en");
             var html = document.documentElement;
             html.classList.add("lang-" + lang);
             html.setAttribute("lang", lang);
         })();
     </script>
-
 
     <!-- Estilos -->
     <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png" />
@@ -36,14 +33,32 @@
     <link rel="stylesheet" href="assets/css/scroll.css" />
     <link rel="stylesheet" href="assets/css/styles.css" />
     <link rel="stylesheet" href="assets/css/responsive.css" />
-    <link rel="canonical" href="https://missaelr.com/sobre-mi.html">
+    <link rel="canonical" href="https://missaelr.com/sobre-mi.html" />
 
     <!-- i18n -->
     <script defer src="assets/js/translations.js"></script>
     <script defer src="assets/js/i18n.js"></script>
 
-    <!-- Script JS -->
+    <!-- Script menú -->
     <script defer src="assets/js/menu.js"></script>
+
+    <!-- Datos estructurados (SEO) -->
+    <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Person",
+    "name":"Missael Rangel",
+    "jobTitle":"Frontend Web Developer",
+    "url":"https://missaelr.com/",
+    "email":"mailto:missael.rangeel@gmail.com",
+    "telephone":"+52-33-3245-8102",
+    "address": {"@type":"PostalAddress","addressLocality":"Guadalajara","addressCountry":"MX"},
+    "sameAs":[
+      "https://www.linkedin.com/in/missaelrangel",
+      "https://github.com/zpymis"
+    ]
+  }
+  </script>
 </head>
 
 <body>
@@ -52,7 +67,7 @@
             <section class="aside__user-info">
                 <div class="user-info__general">
                     <div class="user-info__container-image">
-                        <img src="assets/img/profile.png" class="user-info__image" width="360"
+                        <img src="assets/img/profile.png" class="user-info__image" width="360" decoding="async"
                             data-i18n="common.profileAlt" data-i18n-attr="alt" alt="Foto de perfil de Missael Rangel" />
                     </div>
                     <h2 class="user-info__name">Missael Rangel</h2>
@@ -64,28 +79,25 @@
                     <ul class="menu__list">
                         <li class="menu__option">
                             <a href="index.html" class="menu__link">
-                                <i class="menu__icon fa-solid fa-house"></i>
+                                <i class="menu__icon fa-solid fa-house" aria-hidden="true"></i>
                                 <span class="menu__overlay" data-i18n="nav.home">Inicio</span>
                             </a>
                         </li>
-
                         <li class="menu__option">
                             <a href="sobre-mi.html" class="menu__link menu__link--active" aria-current="page">
-                                <i class="menu__icon fa-solid fa-user"></i>
+                                <i class="menu__icon fa-solid fa-user" aria-hidden="true"></i>
                                 <span class="menu__overlay" data-i18n="nav.about">Sobre mí</span>
                             </a>
                         </li>
-
                         <li class="menu__option">
                             <a href="portafolio.html" class="menu__link">
-                                <i class="menu__icon fa-solid fa-briefcase"></i>
+                                <i class="menu__icon fa-solid fa-briefcase" aria-hidden="true"></i>
                                 <span class="menu__overlay" data-i18n="nav.portfolio">Portafolio</span>
                             </a>
                         </li>
-
                         <li class="menu__option">
                             <a href="contacto.html" class="menu__link">
-                                <i class="menu__icon fa-solid fa-envelope"></i>
+                                <i class="menu__icon fa-solid fa-envelope" aria-hidden="true"></i>
                                 <span class="menu__overlay" data-i18n="nav.contact">Contacto</span>
                             </a>
                         </li>
@@ -102,14 +114,14 @@
                     <ul class="links__social">
                         <li class="social__option">
                             <a href="https://www.linkedin.com/in/missaelrangel" class="social__link"
-                                rel="noopener noreferrer" target="_blank" aria-label="Linkedln de Missael Rangel">
-                                <i class="social__icon fa-brands fa-linkedin"></i>
+                                rel="noopener noreferrer" target="_blank" aria-label="LinkedIn de Missael Rangel">
+                                <i class="social__icon fa-brands fa-linkedin" aria-hidden="true"></i>
                             </a>
                         </li>
                         <li class="social__option">
                             <a href="https://github.com/zpymis" class="social__link" rel="noopener noreferrer"
                                 target="_blank" aria-label="GitHub de Missael Rangel">
-                                <i class="social__icon fa-brands fa-github"></i>
+                                <i class="social__icon fa-brands fa-github" aria-hidden="true"></i>
                             </a>
                         </li>
                     </ul>
@@ -128,8 +140,8 @@
 
         <div class="layout__menu-toggle" role="button" tabindex="0" aria-expanded="false" data-i18n-attr="aria-label"
             aria-controls="aside-nav" aria-label="Abrir menú">
-            <i class="menu-toggle__icon fa-solid fa-bars"></i>
-            <i class="menu-toggle__icon fa-solid fa-xmark"></i>
+            <i class="menu-toggle__icon fa-solid fa-bars" aria-hidden="true"></i>
+            <i class="menu-toggle__icon fa-solid fa-xmark" aria-hidden="true"></i>
         </div>
 
         <main class="layout__content">
@@ -138,7 +150,6 @@
                     <h1 class="about__title" data-i18n="about.title" data-i18n-html>
                         Sobre <span class="u-accent-strong">Mí</span>
                     </h1>
-
                 </header>
 
                 <section class="about__personal-info">
