@@ -754,3 +754,15 @@ textarea.g-recaptcha-response {
 .form__group--captcha {
   margin-top: 1rem;
 }
+
+.form__notice {
+  margin-top: 1.5rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--color-border-reviews);
+  background: var(--color-background-contact);
+  border-radius: 0.5rem;
+  font-size: 1.4rem;
+}
+.form__notice--error {
+  border-color: #e57373;
+}

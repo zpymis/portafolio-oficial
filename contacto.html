@@ -277,6 +277,8 @@
             const submitBtn = form.querySelector('.form__button');
             const captchaWrap = form.querySelector('.form__group--captcha');
             let captchaErr = document.getElementById('recaptchaError');
+            const okEl = document.getElementById('formSuccess');
+            const errEl = document.getElementById('formError');
 
             // ---------- i18n helpers ----------
             const T = (key, fb) =>
@@ -320,7 +322,7 @@
             }
 
             form.querySelectorAll('input[required], textarea[required]').forEach(el => {
-                el.addEventListener('input', () => validateField(el)); // no bloquea moverse entre campos
+                el.addEventListener('input', () => validateField(el));
             });
 
             // ---------- utils captcha ----------
@@ -336,14 +338,43 @@
             function showCaptchaError() { if (captchaErr) captchaErr.textContent = MSG.recaptcha; }
             function clearCaptchaError() { if (captchaErr) captchaErr.textContent = ''; }
 
-            // ---------- submit ----------
-            form.addEventListener('submit', (e) => {
+            // ---------- helpers de UI / envío ----------
+            function setHidden(el, hidden) {
+                if (!el) return;
+                if (hidden) el.setAttribute('hidden', '');
+                else el.removeAttribute('hidden');
+            }
+            function encode(formData) {
+                return new URLSearchParams(formData).toString();
+            }
+            async function sendNetlify(form) {
+                const fd = new FormData(form);
+                // Adjunta token de reCAPTCHA si existe
+                try {
+                    if (window.grecaptcha && typeof grecaptcha.getResponse === 'function') {
+                        const token = grecaptcha.getResponse();
+                        if (token) fd.append('g-recaptcha-response', token);
+                    }
+                } catch { }
+                const res = await fetch('/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: encode(fd)
+                });
+                return res.ok;
+            }
+
+            // ---------- submit (AJAX, sin redirigir) ----------
+            form.addEventListener('submit', async (e) => {
                 clearCaptchaError();
+                setHidden(okEl, true);
+                setHidden(errEl, true);
+
                 const fields = Array.from(form.querySelectorAll('input[required], textarea[required]'));
                 const firstInvalid = fields.find(f => !validateField(f));
                 if (firstInvalid) {
                     e.preventDefault();
-                    firstInvalid.reportValidity(); // globito SOLO aquí
+                    firstInvalid.reportValidity();
                     firstInvalid.focus();
                     return;
                 }
@@ -353,7 +384,25 @@
                     captchaWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     return;
                 }
+
+                // ✅ Enviar por AJAX a Netlify sin recargar
+                e.preventDefault();
                 submitBtn?.setAttribute('disabled', 'true');
+                try {
+                    const ok = await sendNetlify(form);
+                    if (ok) {
+                        form.reset();
+                        try { grecaptcha.reset(); } catch { }
+                        setHidden(okEl, false);
+                        okEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    } else {
+                        setHidden(errEl, false);
+                    }
+                } catch {
+                    setHidden(errEl, false);
+                } finally {
+                    submitBtn?.removeAttribute('disabled');
+                }
             });
 
             // =================================================================
@@ -416,7 +465,7 @@
                 // 1) Limpia contenedor, preservando el <p id="recaptchaError">
                 const errText = captchaErr?.textContent || '';
                 captchaWrap.innerHTML = `<div id="recaptcha-container"></div>
-                             <p class="form__error" id="recaptchaError" role="alert" aria-live="polite">${errText}</p>`;
+      <p class="form__error" id="recaptchaError" role="alert" aria-live="polite">${errText}</p>`;
                 captchaErr = document.getElementById('recaptchaError');
 
                 // 2) Elimina widget previo por completo
@@ -484,7 +533,6 @@
             });
         });
     </script>
-
 </body>
 
 </html>
