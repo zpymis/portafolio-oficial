@@ -401,6 +401,12 @@ h4 {
   transform: scale(1.1);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .article__top:hover .article__image {
+    transform: none;
+  }
+}
+
 .article__logo {
   transition: all 200ms ease-in-out;
   opacity: 0;
@@ -769,4 +775,25 @@ textarea.g-recaptcha-response {
 }
 .form__notice--error {
   border-color: #e57373;
+}
+
+/* Skip link (a11y) */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.8rem 1.2rem;
+  background: #fff;
+  color: #000;
+  border-radius: 0.4rem;
+  z-index: 10000;
 }

@@ -10,6 +10,21 @@
     <meta name="description"
         content="Desarrollador web frontend en Guadalajara. Portafolio con proyectos en HTML, CSS, JavaScript y React, contacto y enlaces a redes."
         data-i18n="meta.index.description" data-i18n-attr="content" />
+    <meta name="theme-color" content="#121212">
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Missael Rangel">
+    <meta property="og:title" content="Inicio — Missael Rangel">
+    <meta property="og:description"
+        content="Desarrollador web frontend en Guadalajara. Portafolio con proyectos en HTML, CSS, JavaScript y React, contacto y enlaces a redes.">
+    <meta property="og:url" content="https://missaelr.com/index.html">
+    <meta property="og:image" content="https://missaelr.com/assets/img/profile.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Inicio — Missael Rangel">
+    <meta name="twitter:description"
+        content="Desarrollador web frontend en Guadalajara. Portafolio con proyectos en HTML, CSS, JavaScript y React, contacto y enlaces a redes.">
+    <meta name="twitter:image" content="https://missaelr.com/assets/img/profile.png">
 
     <!-- Preconfigura idioma temprano para evitar parpadeos -->
     <script>
@@ -62,6 +77,8 @@
 </head>
 
 <body>
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+
     <!-- Layout principal -->
     <div class="layout">
         <!-- Barra lateral -->
@@ -153,13 +170,26 @@
         </div>
 
         <!-- Contenido -->
-        <main class="layout__content">
+        <main id="main" class="layout__content">
             <section class="content__page">
                 <h1 class="page__name">Missael Rangel</h1>
                 <h2 class="page__job" data-i18n="home.hero.job">Desarrollador Web Frontend</h2>
             </section>
         </main>
     </div>
+
+    <!-- Micro-mejora ARIA del selector de idioma -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const grp = document.querySelector('.lang-toggle');
+            if (!grp) return;
+            grp.classList.add('is-animated');
+            const btns = grp.querySelectorAll('.lang-toggle__btn');
+            function setPressed(lang) { btns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang))); }
+            setPressed(document.documentElement.getAttribute('lang') || 'es');
+            btns.forEach(b => b.addEventListener('click', () => setPressed(b.dataset.lang)));
+        });
+    </script>
 </body>
 
 </html>

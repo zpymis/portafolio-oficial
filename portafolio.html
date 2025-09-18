@@ -10,6 +10,21 @@
     <meta name="description"
         content="Portafolio frontend: proyectos con HTML, CSS, JavaScript y React. Código limpio, BEM, buenas prácticas y diseño responsivo."
         data-i18n="meta.portfolio.description" data-i18n-attr="content" />
+    <meta name="theme-color" content="#121212">
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Missael Rangel">
+    <meta property="og:title" content="Portafolio — Missael Rangel">
+    <meta property="og:description"
+        content="Proyectos con HTML, CSS, JavaScript y React. Código limpio, BEM, buenas prácticas y diseño responsivo.">
+    <meta property="og:url" content="https://missaelr.com/portafolio.html">
+    <meta property="og:image" content="https://missaelr.com/assets/img/articulo-1.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Portafolio — Missael Rangel">
+    <meta name="twitter:description"
+        content="Proyectos con HTML, CSS, JavaScript y React. Código limpio, BEM, buenas prácticas y diseño responsivo.">
+    <meta name="twitter:image" content="https://missaelr.com/assets/img/articulo-1.jpg">
 
     <!-- Preconfigura idioma temprano (evita parpadeos del toggle) -->
     <script>
@@ -62,6 +77,8 @@
 </head>
 
 <body>
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+
     <div class="layout">
         <aside id="aside-nav" class="layout__aside">
             <section class="aside__user-info">
@@ -148,7 +165,7 @@
             <i class="menu-toggle__icon fa-solid fa-xmark" aria-hidden="true"></i>
         </div>
 
-        <main class="layout__content">
+        <main id="main" class="layout__content">
             <section class="content__page content__portfolio">
                 <header class="portfolio__header">
                     <h1 class="portfolio__title" data-i18n="portfolio.title">Portafolio</h1>
@@ -167,8 +184,9 @@
                                 aria-label="Abrir proyecto: Cómo aprender a programar">
                                 <div class="article__mask">
                                     <img src="assets/img/articulo-1.jpg" class="article__image" width="600" height="370"
-                                        decoding="async" loading="lazy" data-i18n="portfolio.card1.imgAlt"
-                                        data-i18n-attr="alt" alt="Imagen del portafolio" />
+                                        decoding="async" loading="lazy" sizes="(max-width:800px) 100vw, 50vw"
+                                        data-i18n="portfolio.card1.imgAlt" data-i18n-attr="alt"
+                                        alt="Imagen del portafolio" />
                                 </div>
                                 <div class="article__logo" aria-hidden="true">
                                     <i class="article__icon fa-solid fa-book"></i>
@@ -194,8 +212,9 @@
                                 aria-label="Abrir proyecto: Cómo hacer animaciones en CSS">
                                 <div class="article__mask">
                                     <img src="assets/img/articulo-2.jpg" class="article__image" width="600" height="370"
-                                        decoding="async" loading="lazy" data-i18n="portfolio.card2.imgAlt"
-                                        data-i18n-attr="alt" alt="Imagen del portafolio" />
+                                        decoding="async" loading="lazy" sizes="(max-width:800px) 100vw, 50vw"
+                                        data-i18n="portfolio.card2.imgAlt" data-i18n-attr="alt"
+                                        alt="Imagen del portafolio" />
                                 </div>
                                 <div class="article__logo" aria-hidden="true">
                                     <i class="article__icon fa-solid fa-book"></i>
@@ -221,8 +240,9 @@
                                 aria-label="Abrir proyecto: Cómo usar localStorage en JS">
                                 <div class="article__mask">
                                     <img src="assets/img/articulo-3.jpg" class="article__image" width="600" height="370"
-                                        decoding="async" loading="lazy" data-i18n="portfolio.card3.imgAlt"
-                                        data-i18n-attr="alt" alt="Imagen del portafolio" />
+                                        decoding="async" loading="lazy" sizes="(max-width:800px) 100vw, 50vw"
+                                        data-i18n="portfolio.card3.imgAlt" data-i18n-attr="alt"
+                                        alt="Imagen del portafolio" />
                                 </div>
                                 <div class="article__logo" aria-hidden="true">
                                     <i class="article__icon fa-solid fa-book"></i>
@@ -248,8 +268,9 @@
                                 aria-label="Abrir proyecto: Cómo maquetar una web">
                                 <div class="article__mask">
                                     <img src="assets/img/articulo-4.jpg" class="article__image" width="600" height="370"
-                                        decoding="async" loading="lazy" data-i18n="portfolio.card4.imgAlt"
-                                        data-i18n-attr="alt" alt="Imagen del portafolio" />
+                                        decoding="async" loading="lazy" sizes="(max-width:800px) 100vw, 50vw"
+                                        data-i18n="portfolio.card4.imgAlt" data-i18n-attr="alt"
+                                        alt="Imagen del portafolio" />
                                 </div>
                                 <div class="article__logo" aria-hidden="true">
                                     <i class="article__icon fa-solid fa-book"></i>
@@ -269,6 +290,19 @@
             </section>
         </main>
     </div>
+
+    <!-- Micro-mejora ARIA del selector de idioma -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const grp = document.querySelector('.lang-toggle');
+            if (!grp) return;
+            grp.classList.add('is-animated');
+            const btns = grp.querySelectorAll('.lang-toggle__btn');
+            function setPressed(lang) { btns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang))); }
+            setPressed(document.documentElement.getAttribute('lang') || 'es');
+            btns.forEach(b => b.addEventListener('click', () => setPressed(b.dataset.lang)));
+        });
+    </script>
 </body>
 
 </html>
