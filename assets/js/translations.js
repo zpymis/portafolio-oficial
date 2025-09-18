@@ -181,7 +181,7 @@ window.TRANSLATIONS = {
       card1: { title: "How to learn to code", imgAlt: "Portfolio image" },
       card2: { title: "How to make CSS animations", imgAlt: "Portfolio image" },
       card3: {
-        title: "How to use LocalStorage in JS",
+        title: "How to use localStorage in JS",
         imgAlt: "Portfolio image",
       },
       card4: { title: "How to layout a website", imgAlt: "Portfolio image" },

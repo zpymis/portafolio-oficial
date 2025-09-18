@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
     <title data-i18n="meta.index.title">Inicio — Missael Rangel</title>
-    <meta name="description" data-i18n="meta.index.description" data-i18n-attr="content" />
+    <meta name="description"
+        content="Desarrollador web frontend en Guadalajara. Portafolio con proyectos en HTML, CSS, JavaScript y React, contacto y enlaces a redes."
+        data-i18n="meta.index.description" data-i18n-attr="content" />
     <script>
         (function () {
             var k = "site:lang";
@@ -19,7 +21,9 @@
                 : (nav.startsWith("es") ? "es" : "en");
 
             // Clase en <html> para que el CSS posicione la píldora antes del primer pintado
-            document.documentElement.classList.add("lang-" + lang);
+            var html = document.documentElement;
+            html.classList.add("lang-" + lang);
+            html.setAttribute("lang", lang);
         })();
     </script>
 
@@ -50,8 +54,8 @@
                 <!-- Informacion general usuario -->
                 <div class="user-info__general">
                     <div class="user-info__container-image">
-                        <img src="assets/img/profile.png" class="user-info__image" data-i18n="common.profileAlt"
-                            data-i18n-attr="alt" alt="Foto de perfil de Missael Rangel" />
+                        <img src="assets/img/profile.png" class="user-info__image" width="360"
+                            data-i18n="common.profileAlt" data-i18n-attr="alt" alt="Foto de perfil de Missael Rangel" />
                     </div>
                     <h2 class="user-info__name">Missael Rangel</h2>
                     <h4 class="user-info__job" data-i18n="common.userJob">Desarrollador Web Frontend</h4>
@@ -103,13 +107,13 @@
                     <ul class="links__social">
                         <li class="social__option">
                             <a href="https://www.linkedin.com/in/missaelrangel" class="social__link"
-                                rel="noopener noreferrer" target="_blank">
+                                rel="noopener noreferrer" target="_blank" aria-label="Linkedin de Missael Rangel">
                                 <i class="social__icon fa-brands fa-linkedin"></i>
                             </a>
                         </li>
                         <li class="social__option">
                             <a href="https://github.com/zpymis" class="social__link" rel="noopener noreferrer"
-                                target="_blank">
+                                target="_blank" aria-label="GitHub de Missael Rangel">
                                 <i class="social__icon fa-brands fa-github"></i>
                             </a>
                         </li>
