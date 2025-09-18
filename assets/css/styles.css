@@ -514,6 +514,17 @@ h4 {
   outline-offset: 2px;
 }
 
+/* Ocultar placeholder visual (estándar + vendor) para label flotante */
+.form__input::placeholder {
+  color: transparent;
+}
+.form__input::-webkit-input-placeholder {
+  color: transparent;
+}
+.form__input::-moz-placeholder {
+  color: transparent;
+}
+
 .form__label {
   position: absolute;
   top: 1rem;
@@ -530,14 +541,6 @@ h4 {
   z-index: 1;
   font-size: 1.3rem;
   color: var(--color-secondary);
-}
-
-.form__input::-webkit-input-placeholder {
-  color: transparent;
-}
-
-.form__input::-moz-placeholder {
-  color: transparent;
 }
 
 .form__right {

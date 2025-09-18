@@ -83,14 +83,14 @@ window.TRANSLATIONS = {
       city: "Guadalajara",
       mapTitle: "Mapa: Guadalajara",
       form: {
-        header: '¿Cómo puedo <span class="u-accent-strong">ayudarte</span>?',
+        header: '¿Cómo puedo <span class="u-accent-strong">ayudarte?</span>',
         // Placeholders y tooltips (title) por campo
         name: {
           placeholder: "Nombre",
           title: "Escribe tu nombre (solo letras y espacios).",
         },
         nameLabel: "Nombre",
-        email: { placeholder: "Email", title: "Ingresa un correo válido." },
+        email: { placeholder: "Correo", title: "Ingresa un correo válido." },
         emailLabel: "Correo",
         subject: {
           placeholder: "Asunto",
@@ -113,6 +113,12 @@ window.TRANSLATIONS = {
           recaptcha: "Marca “No soy un robot” antes de enviar.",
           default: "Completa este campo.",
         },
+
+        // Mensajes de éxito/error del envío
+        success:
+          "¡Gracias! Tu mensaje fue enviado correctamente. Te responderé pronto.",
+        error:
+          "Ocurrió un problema al enviar el formulario. Inténtalo de nuevo.",
       },
     },
   },
@@ -220,6 +226,10 @@ window.TRANSLATIONS = {
           recaptcha: "Please check “I'm not a robot”.",
           default: "Please complete this field.",
         },
+
+        success:
+          "Thanks! Your message was sent successfully. I’ll get back to you soon.",
+        error: "Something went wrong sending your message. Please try again.",
       },
     },
   },
