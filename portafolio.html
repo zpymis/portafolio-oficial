@@ -11,7 +11,7 @@
         content="Portafolio frontend: proyectos con HTML, CSS, JavaScript y React. Código limpio, BEM, buenas prácticas y diseño responsivo."
         data-i18n="meta.portfolio.description" data-i18n-attr="content" />
 
-    <!-- Preconfigura idioma temprano -->
+    <!-- Preconfigura idioma temprano (evita parpadeos del toggle) -->
     <script>
         (function () {
             var k = "site:lang";
@@ -39,7 +39,7 @@
     <script defer src="assets/js/translations.js"></script>
     <script defer src="assets/js/i18n.js"></script>
 
-    <!-- Script menú -->
+    <!-- Script JS -->
     <script defer src="assets/js/menu.js"></script>
 
     <!-- Datos estructurados (SEO) -->
@@ -52,7 +52,7 @@
     "url":"https://missaelr.com/",
     "email":"mailto:missael.rangeel@gmail.com",
     "telephone":"+52-33-3245-8102",
-    "address": {"@type":"PostalAddress","addressLocality":"Guadalajara","addressCountry":"MX"},
+    "address":{"@type":"PostalAddress","addressLocality":"Guadalajara","addressCountry":"MX"},
     "sameAs":[
       "https://www.linkedin.com/in/missaelrangel",
       "https://github.com/zpymis"
@@ -67,6 +67,7 @@
             <section class="aside__user-info">
                 <div class="user-info__general">
                     <div class="user-info__container-image">
+                        <!-- Solo width; el CSS maneja height:auto para no deformar -->
                         <img src="assets/img/profile.png" class="user-info__image" width="360" decoding="async"
                             data-i18n="common.profileAlt" data-i18n-attr="alt" alt="Foto de perfil de Missael Rangel" />
                     </div>
@@ -83,18 +84,21 @@
                                 <span class="menu__overlay" data-i18n="nav.home">Inicio</span>
                             </a>
                         </li>
+
                         <li class="menu__option">
                             <a href="sobre-mi.html" class="menu__link">
                                 <i class="menu__icon fa-solid fa-user" aria-hidden="true"></i>
                                 <span class="menu__overlay" data-i18n="nav.about">Sobre mí</span>
                             </a>
                         </li>
+
                         <li class="menu__option">
                             <a href="portafolio.html" class="menu__link menu__link--active" aria-current="page">
                                 <i class="menu__icon fa-solid fa-briefcase" aria-hidden="true"></i>
                                 <span class="menu__overlay" data-i18n="nav.portfolio">Portafolio</span>
                             </a>
                         </li>
+
                         <li class="menu__option">
                             <a href="contacto.html" class="menu__link">
                                 <i class="menu__icon fa-solid fa-envelope" aria-hidden="true"></i>
@@ -150,11 +154,118 @@
                     <h1 class="portfolio__title" data-i18n="portfolio.title">Portafolio</h1>
                 </header>
 
-                <!-- Si ya tienes tus tarjetas/ proyectos, déjalos aquí.
-             Mantengo el contenedor por si luego los añades: -->
-                <section class="portfolio__articles">
-                    <!-- Tus artículos / proyectos van aquí -->
+                <!-- === Tarjetas / Proyectos === -->
+                <section class="portfolio__articles" aria-label="Listado de proyectos">
+                    <!-- Artículo 1 -->
+                    <article class="articles__article">
+                        <div class="article__top">
+                            <div class="article__category">HTML</div>
+                            <div class="article__category article__category--css">CSS</div>
+                            <div class="article__category article__category--js">JavaScript</div>
+
+                            <a href="#" class="article__image-link" rel="noopener noreferrer" target="_blank"
+                                aria-label="Abrir proyecto: Cómo aprender a programar">
+                                <div class="article__mask">
+                                    <img src="assets/img/articulo-1.jpg" class="article__image" width="600" height="370"
+                                        decoding="async" loading="lazy" data-i18n="portfolio.card1.imgAlt"
+                                        data-i18n-attr="alt" alt="Imagen del portafolio" />
+                                </div>
+                                <div class="article__logo" aria-hidden="true">
+                                    <i class="article__icon fa-solid fa-book"></i>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="article__bottom">
+                            <time datetime="2024-08-30" class="article__date">30/08/2024</time>
+                            <a href="#" class="article__link" rel="noopener noreferrer" target="_blank">
+                                <h2 class="article__title" data-i18n="portfolio.card1.title">Cómo aprender a programar
+                                </h2>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- Artículo 2 -->
+                    <article class="articles__article">
+                        <div class="article__top">
+                            <div class="article__category" data-i18n="portfolio.category.dev">Desarrollo</div>
+
+                            <a href="#" class="article__image-link" rel="noopener noreferrer" target="_blank"
+                                aria-label="Abrir proyecto: Cómo hacer animaciones en CSS">
+                                <div class="article__mask">
+                                    <img src="assets/img/articulo-2.jpg" class="article__image" width="600" height="370"
+                                        decoding="async" loading="lazy" data-i18n="portfolio.card2.imgAlt"
+                                        data-i18n-attr="alt" alt="Imagen del portafolio" />
+                                </div>
+                                <div class="article__logo" aria-hidden="true">
+                                    <i class="article__icon fa-solid fa-book"></i>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="article__bottom">
+                            <time datetime="2024-09-05" class="article__date">05/09/2024</time>
+                            <a href="#" class="article__link" rel="noopener noreferrer" target="_blank">
+                                <h2 class="article__title" data-i18n="portfolio.card2.title">Cómo hacer animaciones en
+                                    CSS</h2>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- Artículo 3 -->
+                    <article class="articles__article">
+                        <div class="article__top">
+                            <div class="article__category" data-i18n="portfolio.category.dev">Desarrollo</div>
+
+                            <a href="#" class="article__image-link" rel="noopener noreferrer" target="_blank"
+                                aria-label="Abrir proyecto: Cómo usar localStorage en JS">
+                                <div class="article__mask">
+                                    <img src="assets/img/articulo-3.jpg" class="article__image" width="600" height="370"
+                                        decoding="async" loading="lazy" data-i18n="portfolio.card3.imgAlt"
+                                        data-i18n-attr="alt" alt="Imagen del portafolio" />
+                                </div>
+                                <div class="article__logo" aria-hidden="true">
+                                    <i class="article__icon fa-solid fa-book"></i>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="article__bottom">
+                            <time datetime="2024-10-30" class="article__date">30/10/2024</time>
+                            <a href="#" class="article__link" rel="noopener noreferrer" target="_blank">
+                                <h2 class="article__title" data-i18n="portfolio.card3.title">Cómo usar localStorage en
+                                    JS</h2>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- Artículo 4 -->
+                    <article class="articles__article">
+                        <div class="article__top">
+                            <div class="article__category" data-i18n="portfolio.category.dev">Desarrollo</div>
+
+                            <a href="#" class="article__image-link" rel="noopener noreferrer" target="_blank"
+                                aria-label="Abrir proyecto: Cómo maquetar una web">
+                                <div class="article__mask">
+                                    <img src="assets/img/articulo-4.jpg" class="article__image" width="600" height="370"
+                                        decoding="async" loading="lazy" data-i18n="portfolio.card4.imgAlt"
+                                        data-i18n-attr="alt" alt="Imagen del portafolio" />
+                                </div>
+                                <div class="article__logo" aria-hidden="true">
+                                    <i class="article__icon fa-solid fa-book"></i>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="article__bottom">
+                            <time datetime="2025-06-01" class="article__date">01/06/2025</time>
+                            <a href="#" class="article__link" rel="noopener noreferrer" target="_blank">
+                                <h2 class="article__title" data-i18n="portfolio.card4.title">Cómo maquetar una web</h2>
+                            </a>
+                        </div>
+                    </article>
                 </section>
+                <!-- === /Tarjetas === -->
             </section>
         </main>
     </div>
