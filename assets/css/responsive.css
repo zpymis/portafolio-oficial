@@ -193,6 +193,15 @@
   .contact__container {
     flex-direction: column;
   }
+
+  /* Evitar “ríos” de espacios en móvil */
+  .personal-info__description {
+    text-align: start; /* deja de justificar en móvil */
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    word-spacing: normal;
+    text-wrap: pretty;
+  }
 }
 
 @media (max-width: 480px) {

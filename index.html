@@ -18,13 +18,21 @@
     <meta property="og:title" content="Inicio — Missael Rangel">
     <meta property="og:description"
         content="Desarrollador web frontend en Guadalajara. Portafolio con proyectos en HTML, CSS, JavaScript y React, contacto y enlaces a redes.">
-    <meta property="og:url" content="https://missaelr.com/index.html">
+    <meta property="og:url" content="https://missaelr.com/">
     <meta property="og:image" content="https://missaelr.com/assets/img/profile.png">
+    <meta property="og:image:alt" content="Foto de perfil de Missael Rangel">
+    <meta property="og:locale" content="es_MX">
+    <meta property="og:locale:alternate" content="en_US">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Inicio — Missael Rangel">
     <meta name="twitter:description"
         content="Desarrollador web frontend en Guadalajara. Portafolio con proyectos en HTML, CSS, JavaScript y React, contacto y enlaces a redes.">
     <meta name="twitter:image" content="https://missaelr.com/assets/img/profile.png">
+    <meta name="twitter:image:alt" content="Foto de perfil de Missael Rangel">
+
+    <!-- Alternate (ES por ahora; añade /en/ cuando publiques la versión en inglés) -->
+    <link rel="alternate" hreflang="es-MX" href="https://missaelr.com/">
+    <link rel="alternate" hreflang="x-default" href="https://missaelr.com/">
 
     <!-- Preconfigura idioma temprano para evitar parpadeos -->
     <script>
@@ -48,11 +56,17 @@
     <link rel="stylesheet" href="assets/css/scroll.css" />
     <link rel="stylesheet" href="assets/css/styles.css" />
     <link rel="stylesheet" href="assets/css/responsive.css" />
-    <link rel="canonical" href="https://missaelr.com/index.html" />
+
+    <!-- Canonical (usar raíz para evitar duplicidad con /index.html) -->
+    <link rel="canonical" href="https://missaelr.com/" />
+
+    <!-- Preload LCP probable (foto de perfil en el aside) -->
+    <link rel="preload" as="image" href="assets/img/profile.png" />
 
     <!-- i18n -->
     <script defer src="assets/js/translations.js"></script>
     <script defer src="assets/js/i18n.js"></script>
+    <script defer src="assets/js/lang-toggle.js"></script>
 
     <!-- Script menú -->
     <script defer src="assets/js/menu.js"></script>
@@ -65,9 +79,9 @@
     "name":"Missael Rangel",
     "jobTitle":"Frontend Web Developer",
     "url":"https://missaelr.com/",
-    "email":"mailto:missael.rangeel@gmail.com",
+    "email":"missael.rangeel@gmail.com",
     "telephone":"+52-33-3245-8102",
-    "address": {"@type":"PostalAddress","addressLocality":"Guadalajara","addressCountry":"MX"},
+    "address":{"@type":"PostalAddress","addressLocality":"Guadalajara","addressCountry":"MX"},
     "sameAs":[
       "https://www.linkedin.com/in/missaelrangel",
       "https://github.com/zpymis"
@@ -86,9 +100,10 @@
             <section class="aside__user-info">
                 <div class="user-info__general">
                     <div class="user-info__container-image">
-                        <!-- Solo width; CSS asegura height:auto -->
-                        <img src="assets/img/profile.png" class="user-info__image" width="360" decoding="async"
-                            data-i18n="common.profileAlt" data-i18n-attr="alt" alt="Foto de perfil de Missael Rangel" />
+                        <!-- width+height para evitar CLS -->
+                        <img src="assets/img/profile.png" class="user-info__image" width="360" height="360"
+                            decoding="async" data-i18n="common.profileAlt" data-i18n-attr="alt"
+                            alt="Foto de perfil de Missael Rangel" />
                     </div>
                     <h2 class="user-info__name">Missael Rangel</h2>
                     <h4 class="user-info__job" data-i18n="common.userJob">Desarrollador Web Frontend</h4>
@@ -177,19 +192,6 @@
             </section>
         </main>
     </div>
-
-    <!-- Micro-mejora ARIA del selector de idioma -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const grp = document.querySelector('.lang-toggle');
-            if (!grp) return;
-            grp.classList.add('is-animated');
-            const btns = grp.querySelectorAll('.lang-toggle__btn');
-            function setPressed(lang) { btns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang))); }
-            setPressed(document.documentElement.getAttribute('lang') || 'es');
-            btns.forEach(b => b.addEventListener('click', () => setPressed(b.dataset.lang)));
-        });
-    </script>
 </body>
 
 </html>

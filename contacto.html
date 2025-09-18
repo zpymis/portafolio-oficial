@@ -20,11 +20,15 @@
         content="¿Trabajamos juntos? Contáctame por correo o teléfono. Disponible en Guadalajara y remoto.">
     <meta property="og:url" content="https://missaelr.com/contacto.html">
     <meta property="og:image" content="https://missaelr.com/assets/img/profile.png">
+    <meta property="og:image:alt" content="Foto de perfil de Missael Rangel">
+    <meta property="og:locale" content="es_MX">
+    <meta property="og:locale:alternate" content="en_US">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Contacto — Missael Rangel">
     <meta name="twitter:description"
         content="¿Trabajamos juntos? Contáctame por correo o teléfono. Disponible en Guadalajara y remoto.">
     <meta name="twitter:image" content="https://missaelr.com/assets/img/profile.png">
+    <meta name="twitter:image:alt" content="Foto de perfil de Missael Rangel">
 
     <!-- Preconnect para reCAPTCHA -->
     <link rel="preconnect" href="https://www.google.com" crossorigin>
@@ -36,7 +40,6 @@
             var K = "site:lang";
             var saved = null;
             try { saved = localStorage.getItem(K); } catch (e) { }
-
             var nav = (navigator.language || "es").toLowerCase();
             var lang = (saved === "en" || saved === "es") ? saved : (nav.startsWith("es") ? "es" : "en");
 
@@ -69,9 +72,13 @@
     <link rel="stylesheet" href="assets/css/responsive.css" />
     <link rel="canonical" href="https://missaelr.com/contacto.html" />
 
+    <!-- Preload imagen perfil (usada en el aside) -->
+    <link rel="preload" as="image" href="assets/img/profile.png" />
+
     <!-- i18n -->
     <script defer src="assets/js/translations.js"></script>
     <script defer src="assets/js/i18n.js"></script>
+    <script defer src="assets/js/lang-toggle.js"></script>
 
     <!-- Scripts -->
     <script defer src="assets/js/menu.js"></script>
@@ -85,7 +92,7 @@
     "name":"Missael Rangel",
     "jobTitle":"Frontend Web Developer",
     "url":"https://missaelr.com/",
-    "email":"mailto:missael.rangeel@gmail.com",
+    "email":"missael.rangeel@gmail.com",
     "telephone":"+52-33-3245-8102",
     "address": {"@type":"PostalAddress","addressLocality":"Guadalajara","addressCountry":"MX"},
     "sameAs":[
@@ -95,7 +102,7 @@
     "contactPoint": {
       "@type": "ContactPoint",
       "contactType": "sales",
-      "email": "mailto:missael.rangeel@gmail.com",
+      "email": "missael.rangeel@gmail.com",
       "availableLanguage": ["es","en"]
     }
   }
@@ -117,8 +124,9 @@
             <section class="aside__user-info">
                 <div class="user-info__general">
                     <div class="user-info__container-image">
-                        <img src="assets/img/profile.png" class="user-info__image" width="360" decoding="async"
-                            data-i18n="common.profileAlt" data-i18n-attr="alt" alt="Foto de perfil de Missael Rangel" />
+                        <img src="assets/img/profile.png" class="user-info__image" width="360" height="360"
+                            decoding="async" data-i18n="common.profileAlt" data-i18n-attr="alt"
+                            alt="Foto de perfil de Missael Rangel" />
                     </div>
                     <h2 class="user-info__name">Missael Rangel</h2>
                     <h4 class="user-info__job" data-i18n="common.userJob">Desarrollador Web Frontend</h4>
@@ -239,8 +247,8 @@
                         </header>
 
                         <!-- Netlify Forms + validación custom -->
-                        <form id="contactForm" class="contact__form" name="contacto" method="POST" data-netlify="true"
-                            netlify-honeypot="bot-field" accept-charset="UTF-8" novalidate>
+                        <form id="contactForm" class="contact__form" name="contacto" method="POST" action="/"
+                            data-netlify="true" netlify-honeypot="bot-field" accept-charset="UTF-8" novalidate>
                             <!-- Netlify / Honeypot -->
                             <input type="hidden" name="form-name" value="contacto" />
                             <p class="u-hidden" aria-hidden="true">
@@ -257,9 +265,11 @@
                                             title="Escribe tu nombre (solo letras y espacios)." aria-required="true"
                                             data-i18n="contact.form.name" data-i18n-attr="placeholder,aria-label,title"
                                             placeholder="Nombre" autocomplete="name" autocapitalize="words"
-                                            enterkeyhint="next" />
+                                            enterkeyhint="next" aria-describedby="nameHelp" />
                                         <label for="name" class="form__label"
                                             data-i18n="contact.form.nameLabel">Nombre</label>
+                                        <small id="nameHelp" class="u-hidden">Escribe tu nombre (solo letras y espacios,
+                                            mínimo 2).</small>
                                     </div>
 
                                     <div class="form__group">
@@ -269,9 +279,11 @@
                                             pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$"
                                             title="Ingresa un correo válido." aria-required="true"
                                             data-i18n="contact.form.email" data-i18n-attr="placeholder,aria-label,title"
-                                            placeholder="Correo" spellcheck="false" enterkeyhint="next" />
+                                            placeholder="Correo" spellcheck="false" enterkeyhint="next"
+                                            aria-describedby="emailHelp" />
                                         <label for="email" class="form__label"
                                             data-i18n="contact.form.emailLabel">Correo</label>
+                                        <small id="emailHelp" class="u-hidden">Ingresa un email válido.</small>
                                     </div>
 
                                     <div class="form__group">
@@ -281,9 +293,11 @@
                                             title="Escribe un asunto (mínimo 4 caracteres)." aria-required="true"
                                             data-i18n="contact.form.subject"
                                             data-i18n-attr="placeholder,aria-label,title" placeholder="Asunto"
-                                            enterkeyhint="next" />
+                                            enterkeyhint="next" aria-describedby="subjectHelp" />
                                         <label for="subject" class="form__label"
                                             data-i18n="contact.form.subjectLabel">Asunto</label>
+                                        <small id="subjectHelp" class="u-hidden">Escribe un asunto (mínimo 4
+                                            caracteres).</small>
                                     </div>
                                 </section>
 
@@ -295,9 +309,12 @@
                                             title="Cuéntame los detalles de tu proyecto." aria-required="true"
                                             data-i18n="contact.form.message"
                                             data-i18n-attr="placeholder,aria-label,title" placeholder="Mensaje"
-                                            spellcheck="true" enterkeyhint="send"></textarea>
+                                            spellcheck="true" enterkeyhint="send"
+                                            aria-describedby="messageHelp"></textarea>
                                         <label for="message" class="form__label"
                                             data-i18n="contact.form.messageLabel">Mensaje</label>
+                                        <small id="messageHelp" class="u-hidden">Escribe un mensaje (mínimo 10
+                                            caracteres).</small>
                                     </div>
                                 </section>
                             </div>
@@ -327,6 +344,7 @@
         </main>
     </div>
 
+    <!-- Validación + reCAPTCHA + envío AJAX (tu versión mejorada se mantiene) -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.querySelector('.contact__form');
@@ -472,17 +490,27 @@
             const RC = { sitekey: null, widgetId: null };
             let loadingRecaptcha = false;
 
+            // util wait
+            function waitFor(testFn, timeout = 2000, interval = 60) {
+                return new Promise(resolve => {
+                    const start = Date.now();
+                    (function tick() {
+                        if (testFn()) return resolve(true);
+                        if (Date.now() - start > timeout) return resolve(false);
+                        setTimeout(tick, interval);
+                    })();
+                });
+            }
+
             // Captura una vez el sitekey desde el widget inicial insertado por Netlify
             async function captureSitekeyOnce(timeout = 10000) {
                 if (RC.sitekey) return true;
                 const ok = await waitFor(() => {
-                    // 1) desde el div .g-recaptcha
                     const g = captchaWrap.querySelector('.g-recaptcha');
                     if (g && g.getAttribute('data-sitekey')) {
                         RC.sitekey = g.getAttribute('data-sitekey');
                         return true;
                     }
-                    // 2) desde el iframe (param k)
                     const ifr = captchaWrap.querySelector('iframe[src*="recaptcha"]');
                     if (ifr && ifr.src) {
                         try {
@@ -496,55 +524,35 @@
                 return ok;
             }
 
-            function waitFor(testFn, timeout = 2000, interval = 60) {
-                return new Promise(resolve => {
-                    const start = Date.now();
-                    (function tick() {
-                        if (testFn()) return resolve(true);
-                        if (Date.now() - start > timeout) return resolve(false);
-                        setTimeout(tick, interval);
-                    })();
-                });
-            }
-
-            // Helpers para limpiar/cargar script
             function removeRecaptchaScripts() {
-                // google.com y recaptcha.net; estándar y enterprise
                 document.querySelectorAll(
                     'script[src*="recaptcha/api.js"],script[src*="recaptcha/enterprise.js"],' +
                     'script[src*="//www.recaptcha.net/recaptcha/api.js"],script[src*="//www.recaptcha.net/recaptcha/enterprise.js"]'
                 ).forEach(s => s.remove());
             }
 
-            // Render explícito tras cambiar idioma (sin recargar página)
             async function rerenderRecaptcha(lang) {
                 if (loadingRecaptcha) return;
                 loadingRecaptcha = true;
                 try {
-                    // Asegura sitekey
                     if (!RC.sitekey) {
                         const got = await captureSitekeyOnce(12000);
-                        if (!got) return; // no rompemos nada si no se pudo capturar
+                        if (!got) return;
                     }
-
-                    // 1) Limpia contenedor, preservando el <p id="recaptchaError">
                     const errText = captchaErr?.textContent || '';
                     captchaWrap.innerHTML = `<div id="recaptcha-container"></div>
 <p class="form__error" id="recaptchaError" role="alert" aria-live="polite">${errText}</p>`;
                     captchaErr = document.getElementById('recaptchaError');
 
-                    // 2) Elimina widget previo por completo
                     removeRecaptchaScripts();
                     captchaWrap.querySelectorAll('iframe[src*="recaptcha"], .g-recaptcha, .grecaptcha-badge').forEach(n => n.remove());
                     captchaWrap.querySelectorAll('.g-recaptcha-response').forEach(n => n.remove());
 
-                    // 3) Resetea globals y fija idioma
                     try { delete window.grecaptcha; } catch { }
                     try { delete window.__google_recaptcha_client; } catch { }
                     try { delete window.___grecaptcha_cfg; } catch { }
                     window.___grecaptcha_cfg = { lang: (lang === 'en' ? 'en' : 'es') };
 
-                    // 4) Carga el script con render=explicit + callback + cache-buster
                     const cbName = '__onRecaptchaReady';
                     window[cbName] = function () {
                         try {
@@ -567,16 +575,12 @@
                 }
             }
 
-            // Carga inicial del script si no vino del <head>
             (function ensureRecaptcha() {
                 const hasScript = Array.from(document.scripts).some(s => (s.src || '').includes('/recaptcha/api.js'));
                 if (!hasScript) {
                     const lang = currentLang() === 'en' ? 'en' : 'es';
-                    // Fija idioma antes de cargar
                     window.___grecaptcha_cfg = window.___grecaptcha_cfg || {};
                     window.___grecaptcha_cfg.lang = lang;
-
-                    // Auto-render (Netlify) en primera carga
                     const s = document.createElement('script');
                     s.src = 'https://www.google.com/recaptcha/api.js?hl=' + lang;
                     s.async = true;
@@ -585,10 +589,9 @@
                 }
             })();
 
-            // Captura sitekey pronto (por si luego cambias idioma rápido)
             window.addEventListener('load', () => { captureSitekeyOnce(); });
 
-            // Toggle de idioma: NO recargamos; re-render explícito con el nuevo idioma
+            // Re-render explícito al cambiar idioma
             document.querySelectorAll('.lang-toggle__btn[data-lang]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const newLang = btn.dataset.lang === 'en' ? 'en' : 'es';
@@ -599,19 +602,6 @@
                     }, 0);
                 });
             });
-        });
-    </script>
-
-    <!-- Micro-mejora ARIA del selector de idioma -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const grp = document.querySelector('.lang-toggle');
-            if (!grp) return;
-            grp.classList.add('is-animated');
-            const btns = grp.querySelectorAll('.lang-toggle__btn');
-            function setPressed(lang) { btns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang))); }
-            setPressed(document.documentElement.getAttribute('lang') || 'es');
-            btns.forEach(b => b.addEventListener('click', () => setPressed(b.dataset.lang)));
         });
     </script>
 </body>

@@ -20,13 +20,17 @@
         content="Proyectos con HTML, CSS, JavaScript y React. Código limpio, BEM, buenas prácticas y diseño responsivo.">
     <meta property="og:url" content="https://missaelr.com/portafolio.html">
     <meta property="og:image" content="https://missaelr.com/assets/img/articulo-1.jpg">
+    <meta property="og:image:alt" content="Tarjeta de proyecto del portafolio de Missael Rangel">
+    <meta property="og:locale" content="es_MX">
+    <meta property="og:locale:alternate" content="en_US">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Portafolio — Missael Rangel">
     <meta name="twitter:description"
         content="Proyectos con HTML, CSS, JavaScript y React. Código limpio, BEM, buenas prácticas y diseño responsivo.">
     <meta name="twitter:image" content="https://missaelr.com/assets/img/articulo-1.jpg">
+    <meta name="twitter:image:alt" content="Tarjeta de proyecto del portafolio de Missael Rangel">
 
-    <!-- Preconfigura idioma temprano (evita parpadeos del toggle) -->
+    <!-- Preconfigura idioma temprano -->
     <script>
         (function () {
             var k = "site:lang";
@@ -53,6 +57,7 @@
     <!-- i18n -->
     <script defer src="assets/js/translations.js"></script>
     <script defer src="assets/js/i18n.js"></script>
+    <script defer src="assets/js/lang-toggle.js"></script>
 
     <!-- Script JS -->
     <script defer src="assets/js/menu.js"></script>
@@ -65,7 +70,7 @@
     "name":"Missael Rangel",
     "jobTitle":"Frontend Web Developer",
     "url":"https://missaelr.com/",
-    "email":"mailto:missael.rangeel@gmail.com",
+    "email":"missael.rangeel@gmail.com",
     "telephone":"+52-33-3245-8102",
     "address":{"@type":"PostalAddress","addressLocality":"Guadalajara","addressCountry":"MX"},
     "sameAs":[
@@ -84,9 +89,10 @@
             <section class="aside__user-info">
                 <div class="user-info__general">
                     <div class="user-info__container-image">
-                        <!-- Solo width; el CSS maneja height:auto para no deformar -->
-                        <img src="assets/img/profile.png" class="user-info__image" width="360" decoding="async"
-                            data-i18n="common.profileAlt" data-i18n-attr="alt" alt="Foto de perfil de Missael Rangel" />
+                        <!-- width+height para CLS -->
+                        <img src="assets/img/profile.png" class="user-info__image" width="360" height="360"
+                            decoding="async" data-i18n="common.profileAlt" data-i18n-attr="alt"
+                            alt="Foto de perfil de Missael Rangel" />
                     </div>
                     <h2 class="user-info__name">Missael Rangel</h2>
                     <h4 class="user-info__job" data-i18n="common.userJob">Desarrollador Web Frontend</h4>
@@ -186,7 +192,7 @@
                                     <img src="assets/img/articulo-1.jpg" class="article__image" width="600" height="370"
                                         decoding="async" loading="lazy" sizes="(max-width:800px) 100vw, 50vw"
                                         data-i18n="portfolio.card1.imgAlt" data-i18n-attr="alt"
-                                        alt="Imagen del portafolio" />
+                                        alt="Tutorial: Cómo aprender a programar desde cero con ejemplos" />
                                 </div>
                                 <div class="article__logo" aria-hidden="true">
                                     <i class="article__icon fa-solid fa-book"></i>
@@ -214,7 +220,7 @@
                                     <img src="assets/img/articulo-2.jpg" class="article__image" width="600" height="370"
                                         decoding="async" loading="lazy" sizes="(max-width:800px) 100vw, 50vw"
                                         data-i18n="portfolio.card2.imgAlt" data-i18n-attr="alt"
-                                        alt="Imagen del portafolio" />
+                                        alt="Guía práctica para crear animaciones modernas en CSS paso a paso" />
                                 </div>
                                 <div class="article__logo" aria-hidden="true">
                                     <i class="article__icon fa-solid fa-book"></i>
@@ -242,7 +248,7 @@
                                     <img src="assets/img/articulo-3.jpg" class="article__image" width="600" height="370"
                                         decoding="async" loading="lazy" sizes="(max-width:800px) 100vw, 50vw"
                                         data-i18n="portfolio.card3.imgAlt" data-i18n-attr="alt"
-                                        alt="Imagen del portafolio" />
+                                        alt="Ejemplos de uso de localStorage en JavaScript para guardar preferencias" />
                                 </div>
                                 <div class="article__logo" aria-hidden="true">
                                     <i class="article__icon fa-solid fa-book"></i>
@@ -270,7 +276,7 @@
                                     <img src="assets/img/articulo-4.jpg" class="article__image" width="600" height="370"
                                         decoding="async" loading="lazy" sizes="(max-width:800px) 100vw, 50vw"
                                         data-i18n="portfolio.card4.imgAlt" data-i18n-attr="alt"
-                                        alt="Imagen del portafolio" />
+                                        alt="Buenas prácticas para maquetar una web responsiva con HTML y CSS" />
                                 </div>
                                 <div class="article__logo" aria-hidden="true">
                                     <i class="article__icon fa-solid fa-book"></i>
@@ -290,19 +296,6 @@
             </section>
         </main>
     </div>
-
-    <!-- Micro-mejora ARIA del selector de idioma -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const grp = document.querySelector('.lang-toggle');
-            if (!grp) return;
-            grp.classList.add('is-animated');
-            const btns = grp.querySelectorAll('.lang-toggle__btn');
-            function setPressed(lang) { btns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang))); }
-            setPressed(document.documentElement.getAttribute('lang') || 'es');
-            btns.forEach(b => b.addEventListener('click', () => setPressed(b.dataset.lang)));
-        });
-    </script>
 </body>
 
 </html>
