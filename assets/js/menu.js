@@ -6,6 +6,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const bars = toggle.querySelector(".fa-bars");
   const xmark = toggle.querySelector(".fa-xmark");
 
+  const T = (key, fb) =>
+    (window.i18n && typeof i18n.t === "function" && i18n.t(key)) || fb;
+
+  function setAriaLabel(open) {
+    const label = open
+      ? T("common.closeMenu", "Cerrar menú")
+      : T("common.openMenu", "Abrir menú");
+    toggle.setAttribute("aria-label", label);
+  }
+
   function setMenu(open) {
     aside.classList.toggle("layout__aside--visible", open);
     toggle.setAttribute("aria-expanded", String(open));
@@ -14,7 +24,19 @@ document.addEventListener("DOMContentLoaded", () => {
       xmark.style.opacity = open ? "1" : "0";
     }
     document.body.style.overflow = open ? "hidden" : "";
+    setAriaLabel(open);
+
+    // Mueve el foco al primer enlace del menú cuando abre
+    if (open) {
+      const firstLink = aside.querySelector(".menu__link");
+      if (firstLink) firstLink.focus({ preventScroll: true });
+    } else {
+      toggle.focus({ preventScroll: true });
+    }
   }
+
+  // Inicializa etiqueta correcta según estado (cerrado)
+  setAriaLabel(false);
 
   toggle.addEventListener("click", () => {
     const open = aside.classList.contains("layout__aside--visible");

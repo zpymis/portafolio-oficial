@@ -62,19 +62,22 @@ window.TRANSLATIONS = {
       category: { dev: "Desarrollo" },
       card1: {
         title: "Cómo aprender a programar",
-        imgAlt: "Imagen del portafolio",
+        imgAlt: "Tutorial: Cómo aprender a programar desde cero con ejemplos",
       },
       card2: {
         title: "Cómo hacer animaciones en CSS",
-        imgAlt: "Imagen del portafolio",
+        imgAlt:
+          "Guía práctica para crear animaciones modernas en CSS paso a paso",
       },
       card3: {
         title: "Cómo usar localStorage en JS",
-        imgAlt: "Imagen del portafolio",
+        imgAlt:
+          "Ejemplos de uso de localStorage en JavaScript para guardar preferencias",
       },
       card4: {
         title: "Cómo maquetar una web",
-        imgAlt: "Imagen del portafolio",
+        imgAlt:
+          "Buenas prácticas para maquetar una web responsiva con HTML y CSS",
       },
     },
 
@@ -184,13 +187,24 @@ window.TRANSLATIONS = {
     portfolio: {
       title: "Portfolio",
       category: { dev: "Development" },
-      card1: { title: "How to learn to code", imgAlt: "Portfolio image" },
-      card2: { title: "How to make CSS animations", imgAlt: "Portfolio image" },
+      card1: {
+        title: "How to learn to code",
+        imgAlt: "Tutorial: how to learn to code from scratch with examples",
+      },
+      card2: {
+        title: "How to make CSS animations",
+        imgAlt: "Hands-on guide to building modern CSS animations step by step",
+      },
       card3: {
         title: "How to use localStorage in JS",
-        imgAlt: "Portfolio image",
+        imgAlt:
+          "Examples of using JavaScript localStorage to save user preferences",
       },
-      card4: { title: "How to layout a website", imgAlt: "Portfolio image" },
+      card4: {
+        title: "How to layout a website",
+        imgAlt:
+          "Best practices to build a responsive website layout with HTML and CSS",
+      },
     },
 
     contact: {

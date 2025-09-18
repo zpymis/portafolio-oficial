@@ -179,6 +179,13 @@
   }
 }
 
+/* Justificar solo en desktop ancho (ajusta 900px a tu gusto) */
+@media (min-width: 900px) {
+  .personal-info__description {
+    text-align: justify;
+  }
+}
+
 @media (max-width: 800px) {
   .articles__article {
     flex-basis: 100%;
@@ -192,15 +199,6 @@
 
   .contact__container {
     flex-direction: column;
-  }
-
-  /* Evitar “ríos” de espacios en móvil */
-  .personal-info__description {
-    text-align: start; /* deja de justificar en móvil */
-    hyphens: auto;
-    -webkit-hyphens: auto;
-    word-spacing: normal;
-    text-wrap: pretty;
   }
 }
 
