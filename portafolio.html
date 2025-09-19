@@ -179,33 +179,47 @@
 
                 <!-- === Tarjetas / Proyectos === -->
                 <section class="portfolio__articles" aria-label="Listado de proyectos">
-                    <!-- Artículo 1 -->
+                    <!-- Artículo 1 (nuevo) -->
                     <article class="articles__article">
                         <div class="article__top">
+                            <!-- Etiquetas/tecnologías -->
                             <div class="article__category">HTML</div>
                             <div class="article__category article__category--css">CSS</div>
                             <div class="article__category article__category--js">JavaScript</div>
 
-                            <a href="#" class="article__image-link" rel="noopener noreferrer" target="_blank"
-                                aria-label="Abrir proyecto: Cómo aprender a programar">
+                            <!-- 👉 Case study interno -->
+                            <a href="projects/todo-app/" class="article__image-link"
+                                aria-label="Abrir case study: Todo App">
                                 <div class="article__mask">
                                     <img src="assets/img/articulo-1.jpg" class="article__image" width="600" height="370"
                                         decoding="async" loading="lazy" sizes="(max-width:800px) 100vw, 50vw"
-                                        data-i18n="portfolio.card1.imgAlt" data-i18n-attr="alt"
-                                        alt="Tutorial: Cómo aprender a programar desde cero con ejemplos" />
-                                </div>
-                                <div class="article__logo" aria-hidden="true">
-                                    <i class="article__icon fa-solid fa-book"></i>
+                                        alt="Miniatura del proyecto Todo App" />
                                 </div>
                             </a>
                         </div>
 
                         <div class="article__bottom">
-                            <time datetime="2024-08-30" class="article__date">30/08/2024</time>
-                            <a href="#" class="article__link" rel="noopener noreferrer" target="_blank">
-                                <h2 class="article__title" data-i18n="portfolio.card1.title">Cómo aprender a programar
-                                </h2>
+                            <time datetime="2025-02-01" class="article__date">01/02/2025</time>
+
+                            <!-- 👉 El título también abre el case study -->
+                            <a href="projects/todo-app/" class="article__link">
+                                <h2 class="article__title">Todo App</h2>
                             </a>
+
+                            <!-- Descripción breve (opcional pero recomendado) -->
+                            <p class="article__desc">
+                                App de tareas con filtros, persistencia en localStorage y accesibilidad básica
+                                (teclado/ARIA).
+                            </p>
+
+                            <!-- 👉 Acciones rápidas -->
+                            <div class="article__actions" role="group" aria-label="Acciones del proyecto Todo App">
+                                <a class="article__btn article__btn--primary" href="https://todo.missaelr.com"
+                                    target="_blank" rel="noopener noreferrer">Live</a>
+
+                                <a class="article__btn article__btn--ghost" href="https://github.com/zpymis/todo-app"
+                                    target="_blank" rel="noopener noreferrer">Código</a>
+                            </div>
                         </div>
                     </article>
 
@@ -221,9 +235,6 @@
                                         decoding="async" loading="lazy" sizes="(max-width:800px) 100vw, 50vw"
                                         data-i18n="portfolio.card2.imgAlt" data-i18n-attr="alt"
                                         alt="Guía práctica para crear animaciones modernas en CSS paso a paso" />
-                                </div>
-                                <div class="article__logo" aria-hidden="true">
-                                    <i class="article__icon fa-solid fa-book"></i>
                                 </div>
                             </a>
                         </div>
@@ -250,9 +261,6 @@
                                         data-i18n="portfolio.card3.imgAlt" data-i18n-attr="alt"
                                         alt="Ejemplos de uso de localStorage en JavaScript para guardar preferencias" />
                                 </div>
-                                <div class="article__logo" aria-hidden="true">
-                                    <i class="article__icon fa-solid fa-book"></i>
-                                </div>
                             </a>
                         </div>
 
@@ -277,9 +285,6 @@
                                         decoding="async" loading="lazy" sizes="(max-width:800px) 100vw, 50vw"
                                         data-i18n="portfolio.card4.imgAlt" data-i18n-attr="alt"
                                         alt="Buenas prácticas para maquetar una web responsiva con HTML y CSS" />
-                                </div>
-                                <div class="article__logo" aria-hidden="true">
-                                    <i class="article__icon fa-solid fa-book"></i>
                                 </div>
                             </a>
                         </div>

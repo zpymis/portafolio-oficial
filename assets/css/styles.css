@@ -342,7 +342,7 @@ h4 {
 }
 
 .personal-info__description + .personal-info__description {
-  margin-block-start: 2.5rem; 
+  margin-block-start: 2.5rem;
 }
 
 /* ESTILOS GENERALES COMPARTIDOS ABOUT Y OTRAS PAGINAS */
@@ -424,25 +424,6 @@ h4 {
   }
 }
 
-.article__logo {
-  transition: all 200ms ease-in-out;
-  opacity: 0;
-}
-
-.article__icon {
-  position: absolute;
-  top: calc(50% - 2.2rem);
-  left: calc(50% - 2.2rem);
-  width: 4.4rem;
-  font-size: 4.4rem;
-  text-align: center;
-  color: var(--color-principal);
-}
-
-.article__top:hover .article__logo {
-  opacity: 1;
-}
-
 .article__bottom {
   margin: 0;
   padding: 2.1rem;
@@ -460,6 +441,63 @@ h4 {
 
 .article__title {
   font-size: 1.8rem;
+}
+
+/* === Portafolio: contenido y acciones dentro de la tarjeta === */
+
+.article__desc {
+  margin-top: 0.6rem;
+  font-size: 1.4rem;
+  line-height: 2.2rem;
+  color: var(--color-subtitles);
+}
+
+.article__actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.article__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1.4rem;
+  border-radius: 2.4rem;
+  font-weight: 600;
+  border: 2px solid var(--color-secondary);
+  transition: transform 120ms ease, box-shadow 200ms ease,
+    background-color 200ms ease, color 200ms ease;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.article__btn--primary {
+  background: var(--color-secondary);
+  color: var(--color-principal);
+}
+
+.article__btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(74, 144, 226, 0.25);
+}
+
+.article__btn--ghost {
+  background: transparent;
+  color: var(--color-titles);
+}
+
+.article__btn--ghost:hover {
+  background: var(--color-principal);
+  color: var(--color-secondary);
+  transform: translateY(-1px);
+}
+
+.article__btn:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.25);
 }
 
 /* PAGINA CONTACTO */
