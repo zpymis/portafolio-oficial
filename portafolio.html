@@ -3,7 +3,6 @@
 
 <head>
     <meta charset="UTF-8" />
-    <!-- Accesibilidad: no bloquear zoom -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title data-i18n="meta.portfolio.title">Portafolio — Missael Rangel</title>
@@ -89,7 +88,6 @@
             <section class="aside__user-info">
                 <div class="user-info__general">
                     <div class="user-info__container-image">
-                        <!-- width+height para CLS -->
                         <img src="assets/img/profile.png" class="user-info__image" width="360" height="360"
                             decoding="async" fetchpriority="high" data-i18n="common.profileAlt" data-i18n-attr="alt"
                             alt="Foto de perfil de Missael Rangel" />
@@ -179,17 +177,19 @@
 
                 <!-- === Tarjetas / Proyectos === -->
                 <section class="portfolio__articles" aria-label="Listado de proyectos">
-                    <!-- Artículo 1 (nuevo) -->
+
+                    <!-- Artículo 1 -->
                     <article class="articles__article">
                         <div class="article__top">
-                            <!-- Etiquetas/tecnologías -->
-                            <div class="article__category">HTML</div>
-                            <div class="article__category article__category--css">CSS</div>
-                            <div class="article__category article__category--js">JavaScript</div>
+                            <div class="article__tags" aria-hidden="true">
+                                <span class="article__category">HTML</span>
+                                <span class="article__category">CSS</span>
+                                <span class="article__category">JavaScript</span>
+                            </div>
 
-                            <!-- 👉 Case study interno -->
-                            <a href="projects/todo-app/" class="article__image-link"
-                                aria-label="Abrir case study: Todo App">
+                            <!-- Miniatura → Live -->
+                            <a href="https://todo.missaelr.com" class="article__image-link" target="_blank"
+                                rel="noopener noreferrer" aria-label="Abrir live: Todo App">
                                 <div class="article__mask">
                                     <img src="assets/img/articulo-1.jpg" class="article__image" width="600" height="370"
                                         decoding="async" loading="lazy" sizes="(max-width:800px) 100vw, 50vw"
@@ -199,26 +199,28 @@
                         </div>
 
                         <div class="article__bottom">
-                            <time datetime="2025-02-01" class="article__date">01/02/2025</time>
-
-                            <!-- 👉 El título también abre el case study -->
-                            <a href="projects/todo-app/" class="article__link">
+                            <!-- Título → Live -->
+                            <a href="https://todo.missaelr.com" class="article__link" target="_blank"
+                                rel="noopener noreferrer">
                                 <h2 class="article__title">Todo App</h2>
                             </a>
 
-                            <!-- Descripción breve (opcional pero recomendado) -->
                             <p class="article__desc">
-                                App de tareas con filtros, persistencia en localStorage y accesibilidad básica
-                                (teclado/ARIA).
+                                Gestor de tareas con filtros y búsqueda, persistencia en <code>localStorage</code> y
+                                accesibilidad por teclado/ARIA.
                             </p>
 
-                            <!-- 👉 Acciones rápidas -->
-                            <div class="article__actions" role="group" aria-label="Acciones del proyecto Todo App">
+                            <div class="article__actions" role="group" aria-label="Acciones de Todo App">
                                 <a class="article__btn article__btn--primary" href="https://todo.missaelr.com"
-                                    target="_blank" rel="noopener noreferrer">Live</a>
-
+                                    target="_blank" rel="noopener noreferrer">
+                                    <i class="fa-solid fa-up-right-from-square" aria-hidden="true"></i>
+                                    <span>Live</span>
+                                </a>
                                 <a class="article__btn article__btn--ghost" href="https://github.com/zpymis/todo-app"
-                                    target="_blank" rel="noopener noreferrer">Código</a>
+                                    target="_blank" rel="noopener noreferrer">
+                                    <i class="fa-brands fa-github" aria-hidden="true"></i>
+                                    <span>Código</span>
+                                </a>
                             </div>
                         </div>
                     </article>
@@ -226,76 +228,138 @@
                     <!-- Artículo 2 -->
                     <article class="articles__article">
                         <div class="article__top">
-                            <div class="article__category" data-i18n="portfolio.category.dev">Desarrollo</div>
+                            <div class="article__tags" aria-hidden="true">
+                                <span class="article__category">HTML</span>
+                                <span class="article__category">CSS</span>
+                            </div>
 
-                            <a href="#" class="article__image-link" rel="noopener noreferrer" target="_blank"
-                                aria-label="Abrir proyecto: Cómo hacer animaciones en CSS">
+                            <a href="https://animaciones.missaelr.com" class="article__image-link" target="_blank"
+                                rel="noopener noreferrer" aria-label="Abrir live: Animaciones CSS">
                                 <div class="article__mask">
                                     <img src="assets/img/articulo-2.jpg" class="article__image" width="600" height="370"
                                         decoding="async" loading="lazy" sizes="(max-width:800px) 100vw, 50vw"
-                                        data-i18n="portfolio.card2.imgAlt" data-i18n-attr="alt"
-                                        alt="Guía práctica para crear animaciones modernas en CSS paso a paso" />
+                                        alt="Miniatura del proyecto Animaciones CSS" />
                                 </div>
                             </a>
                         </div>
 
                         <div class="article__bottom">
-                            <time datetime="2024-09-05" class="article__date">05/09/2024</time>
-                            <a href="#" class="article__link" rel="noopener noreferrer" target="_blank">
-                                <h2 class="article__title" data-i18n="portfolio.card2.title">Cómo hacer animaciones en
-                                    CSS</h2>
+                            <a href="https://animaciones.missaelr.com" class="article__link" target="_blank"
+                                rel="noopener noreferrer">
+                                <h2 class="article__title">Animaciones CSS</h2>
                             </a>
+
+                            <p class="article__desc">
+                                Microinteracciones con <code>transforms</code>, <code>transitions</code> y
+                                <code>@keyframes</code>, respetando <code>prefers-reduced-motion</code>.
+                            </p>
+
+                            <div class="article__actions" role="group" aria-label="Acciones de Animaciones CSS">
+                                <a class="article__btn article__btn--primary" href="https://animaciones.missaelr.com"
+                                    target="_blank" rel="noopener noreferrer">
+                                    <i class="fa-solid fa-up-right-from-square" aria-hidden="true"></i>
+                                    <span>Live</span>
+                                </a>
+                                <a class="article__btn article__btn--ghost"
+                                    href="https://github.com/zpymis/css-animations" target="_blank"
+                                    rel="noopener noreferrer">
+                                    <i class="fa-brands fa-github" aria-hidden="true"></i>
+                                    <span>Código</span>
+                                </a>
+                            </div>
                         </div>
                     </article>
 
                     <!-- Artículo 3 -->
                     <article class="articles__article">
                         <div class="article__top">
-                            <div class="article__category" data-i18n="portfolio.category.dev">Desarrollo</div>
+                            <div class="article__tags" aria-hidden="true">
+                                <span class="article__category">HTML</span>
+                                <span class="article__category">JavaScript</span>
+                            </div>
 
-                            <a href="#" class="article__image-link" rel="noopener noreferrer" target="_blank"
-                                aria-label="Abrir proyecto: Cómo usar localStorage en JS">
+                            <a href="https://notes.missaelr.com" class="article__image-link" target="_blank"
+                                rel="noopener noreferrer" aria-label="Abrir live: Notas con localStorage">
                                 <div class="article__mask">
                                     <img src="assets/img/articulo-3.jpg" class="article__image" width="600" height="370"
                                         decoding="async" loading="lazy" sizes="(max-width:800px) 100vw, 50vw"
-                                        data-i18n="portfolio.card3.imgAlt" data-i18n-attr="alt"
-                                        alt="Ejemplos de uso de localStorage en JavaScript para guardar preferencias" />
+                                        alt="Miniatura del proyecto Notas con localStorage" />
                                 </div>
                             </a>
                         </div>
 
                         <div class="article__bottom">
-                            <time datetime="2024-10-30" class="article__date">30/10/2024</time>
-                            <a href="#" class="article__link" rel="noopener noreferrer" target="_blank">
-                                <h2 class="article__title" data-i18n="portfolio.card3.title">Cómo usar localStorage en
-                                    JS</h2>
+                            <a href="https://notes.missaelr.com" class="article__link" target="_blank"
+                                rel="noopener noreferrer">
+                                <h2 class="article__title">Notas con localStorage</h2>
                             </a>
+
+                            <p class="article__desc">
+                                CRUD de notas sin backend: autosave, búsqueda y sincronización entre pestañas con
+                                <code>StorageEvent</code>.
+                            </p>
+
+                            <div class="article__actions" role="group" aria-label="Acciones de Notas con localStorage">
+                                <a class="article__btn article__btn--primary" href="https://notes.missaelr.com"
+                                    target="_blank" rel="noopener noreferrer">
+                                    <i class="fa-solid fa-up-right-from-square" aria-hidden="true"></i>
+                                    <span>Live</span>
+                                </a>
+                                <a class="article__btn article__btn--ghost"
+                                    href="https://github.com/zpymis/localstorage-notes" target="_blank"
+                                    rel="noopener noreferrer">
+                                    <i class="fa-brands fa-github" aria-hidden="true"></i>
+                                    <span>Código</span>
+                                </a>
+                            </div>
                         </div>
                     </article>
 
                     <!-- Artículo 4 -->
                     <article class="articles__article">
                         <div class="article__top">
-                            <div class="article__category" data-i18n="portfolio.category.dev">Desarrollo</div>
+                            <div class="article__tags" aria-hidden="true">
+                                <span class="article__category">HTML</span>
+                                <span class="article__category">CSS</span>
+                            </div>
 
-                            <a href="#" class="article__image-link" rel="noopener noreferrer" target="_blank"
-                                aria-label="Abrir proyecto: Cómo maquetar una web">
+                            <a href="https://layout.missaelr.com" class="article__image-link" target="_blank"
+                                rel="noopener noreferrer" aria-label="Abrir live: Maquetación Responsive">
                                 <div class="article__mask">
                                     <img src="assets/img/articulo-4.jpg" class="article__image" width="600" height="370"
                                         decoding="async" loading="lazy" sizes="(max-width:800px) 100vw, 50vw"
-                                        data-i18n="portfolio.card4.imgAlt" data-i18n-attr="alt"
-                                        alt="Buenas prácticas para maquetar una web responsiva con HTML y CSS" />
+                                        alt="Miniatura del proyecto Maquetación Responsive" />
                                 </div>
                             </a>
                         </div>
 
                         <div class="article__bottom">
-                            <time datetime="2025-06-01" class="article__date">01/06/2025</time>
-                            <a href="#" class="article__link" rel="noopener noreferrer" target="_blank">
-                                <h2 class="article__title" data-i18n="portfolio.card4.title">Cómo maquetar una web</h2>
+                            <a href="https://layout.missaelr.com" class="article__link" target="_blank"
+                                rel="noopener noreferrer">
+                                <h2 class="article__title">Maquetación Responsive</h2>
                             </a>
+
+                            <p class="article__desc">
+                                Sistema fluido con Grid y <code>clamp()</code>, dark mode y patrones BEM. LCP
+                                ~1.8&nbsp;s en 4G simulado.
+                            </p>
+
+                            <div class="article__actions" role="group" aria-label="Acciones de Maquetación Responsive">
+                                <a class="article__btn article__btn--primary" href="https://layout.missaelr.com"
+                                    target="_blank" rel="noopener noreferrer">
+                                    <i class="fa-solid fa-up-right-from-square" aria-hidden="true"></i>
+                                    <span>Live</span>
+                                </a>
+                                <a class="article__btn article__btn--ghost"
+                                    href="https://github.com/zpymis/responsive-layout" target="_blank"
+                                    rel="noopener noreferrer">
+                                    <i class="fa-brands fa-github" aria-hidden="true"></i>
+                                    <span>Código</span>
+                                </a>
+                            </div>
                         </div>
                     </article>
+
                 </section>
                 <!-- === /Tarjetas === -->
             </section>

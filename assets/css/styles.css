@@ -361,17 +361,14 @@ h4 {
 .portfolio__articles {
   margin-bottom: 2.5rem;
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
-  /* rendimiento: no pintar fuera de viewport */
   content-visibility: auto;
   contain-intrinsic-size: 600px;
 }
 
 .articles__article {
   flex-basis: 50%;
-  padding: 0 1.5rem;
-  padding-bottom: 3.5rem;
+  padding: 0 1.5rem 3.5rem;
 }
 
 .article__top {
@@ -379,43 +376,46 @@ h4 {
   overflow: hidden;
 }
 
-.article__category {
+/* Etiquetas tecnología (píldoras) */
+.article__tags {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
-  font-size: 1.1rem;
-  line-height: 2rem;
-  padding: 0.1rem 0.7rem;
-  background-color: var(--color-principal);
-  color: var(--color-text);
+  top: 0.8rem;
+  left: 0.8rem;
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
   z-index: 3;
 }
 
-.article__category--css {
-  left: 6rem;
+.article__category {
+  font-size: 1.1rem;
+  line-height: 2rem;
+  padding: 0.2rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(28, 28, 30, 0.84);
+  color: var(--color-text);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: saturate(150%) blur(4px);
 }
 
-.article__category--js {
-  left: 10.3rem;
-}
-
+/* Imagen */
 .article__mask {
   width: 100%;
   height: 18.5rem;
   overflow: hidden;
+  border-radius: 0.8rem 0.8rem 0 0;
 }
 
 .article__image {
   display: block;
-  z-index: 1;
-  transition: all 300ms ease-in-out;
-  height: 100%;
   width: 100%;
+  height: 100%;
   object-fit: cover;
+  transition: transform 260ms ease;
 }
 
 .article__top:hover .article__image {
-  transform: scale(1.1);
+  transform: scale(1.06);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -424,27 +424,21 @@ h4 {
   }
 }
 
+/* Contenido */
 .article__bottom {
   margin: 0;
-  padding: 2.1rem;
-  padding-top: 1.5rem;
+  padding: 1.6rem 2.1rem 2.1rem;
   border: 0.1rem solid var(--color-border-reviews);
   border-top: 0;
-}
-
-.article__date {
-  display: block;
-  font-size: 1.1rem;
-  font-weight: 300;
-  color: var(--color-subtitles);
+  border-radius: 0 0 0.8rem 0.8rem;
 }
 
 .article__title {
-  font-size: 1.8rem;
+  font-size: 1.9rem;
+  margin: 0;
 }
 
 /* === Portafolio: contenido y acciones dentro de la tarjeta === */
-
 .article__desc {
   margin-top: 0.6rem;
   font-size: 1.4rem;
@@ -452,6 +446,7 @@ h4 {
   color: var(--color-subtitles);
 }
 
+/* Acciones */
 .article__actions {
   display: flex;
   gap: 0.8rem;
@@ -462,38 +457,53 @@ h4 {
 .article__btn {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  padding: 0.9rem 1.4rem;
-  border-radius: 2.4rem;
-  font-weight: 600;
+  gap: 0.6rem;
+  padding: 1rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1.35rem;
   border: 2px solid var(--color-secondary);
-  transition: transform 120ms ease, box-shadow 200ms ease,
-    background-color 200ms ease, color 200ms ease;
   text-decoration: none;
   line-height: 1;
+  transition: transform 120ms ease, box-shadow 200ms ease,
+    background-color 200ms ease, color 200ms ease, border-color 200ms ease;
 }
 
+.article__btn i {
+  font-size: 1.25em;
+}
+
+/* Primario */
 .article__btn--primary {
-  background: var(--color-secondary);
+  background: linear-gradient(180deg, var(--color-secondary), #3a7bd5);
   color: var(--color-principal);
+  box-shadow: 0 6px 16px rgba(74, 144, 226, 0.24);
 }
-
 .article__btn--primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(74, 144, 226, 0.25);
+  box-shadow: 0 10px 24px rgba(74, 144, 226, 0.3);
+}
+.article__btn--primary:active {
+  transform: translateY(0);
 }
 
+/* Secundario (ghost) */
 .article__btn--ghost {
   background: transparent;
   color: var(--color-titles);
+  border-color: rgba(255, 255, 255, 0.22);
 }
-
 .article__btn--ghost:hover {
-  background: var(--color-principal);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--color-secondary);
   color: var(--color-secondary);
   transform: translateY(-1px);
 }
+.article__btn--ghost:active {
+  transform: translateY(0);
+}
 
+/* Accesibilidad: foco */
 .article__btn:focus-visible {
   outline: 2px solid var(--color-secondary);
   outline-offset: 2px;
