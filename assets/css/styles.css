@@ -414,6 +414,12 @@ h4 {
   transition: transform 260ms ease;
 }
 
+.article__image-link:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
 .article__top:hover .article__image {
   transform: scale(1.06);
 }
